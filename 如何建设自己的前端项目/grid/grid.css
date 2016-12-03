@@ -1,0 +1,92 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+div{
+	box-sizing: border-box;
+}
+.ys-layout{
+	position: relative;
+	min-height: 10px;
+	margin: 0 auto;
+}
+.ys-layout__header{
+	position: relative;
+	width: 100%;
+	margin: 0 auto;
+	padding: 10px 15px;
+}
+.ys-layout__header-row{
+	height: 60px;
+	padding: 10px;
+	line-height: 60px;
+	vertical-align: middle;
+}
+.ys-layout__container{
+	position: relative;
+	min-height: 10px;
+	margin: 0 auto;
+	padding: 10px 15px;
+	text-align: center;
+}
+.ys-layout__container:after{
+	content: '';
+	display: block;
+	width: 100%;
+	visibility: hidden;
+	clear: both;
+}
+.ys-layout__menu{
+	width: 190px;
+	background-color: rgba(22,75,111,.6);
+}
+.ys-layout__menu--left{
+	float: left;
+	margin-left: -100%; 
+}
+.ys-layout__menu--right{
+	float: right;
+	margin-left: -190px;   
+}
+.ys-layout__menu-item{
+	display: block;
+	padding:10px 15px;
+	border-bottom: 1px solid #ddd;
+}
+.ys-layout__content{
+	padding: 0 200px;
+	float: left;
+	width: 100%;
+}
+.ys-layout__content--center{
+	margin: 0 auto;
+	background-color: rgba(0,22,111,.6);
+}
+.ys-layout__footer{
+	position: relative;
+	min-height: 10px;
+	margin: 0 auto;
+	padding: 10px 15px;
+	text-align: center;
+}
+/* 固定布局 */
+.ys-fixed-layout{
+	width: 1200px;
+}
+/* 流式布局 */
+.ys-fluid-layout{
+	width: 100%;
+	min-width: 680px;
+}
+.ys-fluid-layout .ys-layout__menu{
+	width: 10%;
+}
+.ys-fluid-layout .ys-layout__menu--right{
+	margin-left: -10%;
+}
+.ys-fluid-layout .ys-layout__content{
+	padding: 0 10.5%;
+}
+/* 响应式布局 */
+
+/* 自适应布局 */

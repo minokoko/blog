@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>布局比较</title>
+	<link rel="stylesheet" type="text/css" href="grid.css">
+	<style type="text/css">
+		.ys-layout{
+			margin-bottom: 50px;
+		}
+		.ys-layout__header-row{
+			position: relative;
+			height: 80px;
+			background-color: rgba(19,127,116,.6);
+			overflow: hidden;
+		}
+		#change-layout{
+			position: absolute;
+			top: 50%;
+			margin-top: -15px;
+			right: 40px;
+			font-size: 24px;
+		}
+		ul{
+			list-style: none;
+		}
+		li{
+			overflow: hidden;
+		}
+		li:after{
+			content: '';
+			display: block;
+			width: 100%;
+			visibility: hidden;
+			clear: both;
+		}
+		.content-image{
+			float: left;
+			padding: 5px;
+			width: 20%;
+		}
+		.content-image img{
+			max-width: 100%;
+		}
+		.content-text{
+			width: 80%;
+			margin-left: 20%;
+			padding: 10px;
+			text-align: left;
+			word-break: break-all;
+		}
+		.header{
+			display: none;
+		}
+		.fixed .fixed{
+			display: block;
+		}
+		.fluid .fluid{
+			display: block;
+		}
+		.adaptive .adaptive{
+			display: block;
+		}
+		.responsive .responsive{
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<div id="ys-layout" class="ys-layout ys-fixed-layout">
+		<div class="ys-layout__header">
+			<div class="ys-layout__header-row fixed">
+				<h1 class="header fixed"> 静态(固定)布局 </h1>
+				<h1 class="header fluid"> 流式布局 </h1>
+				<h1 class="header adaptive"> 自适应布局 </h1>
+				<h1 class="header responsive"> 响应式布局 </h1>
+				<select id="change-layout">
+					<option value="fixed">静态</option>
+					<option value="fluid">流式</option>
+					<option value="adaptive">自适应</option>
+					<option value="responsive">响应式</option>
+				</select>
+			</div>
+		</div>
+		<div class="ys-layout__container">
+			<div class="ys-layout__content">
+					<div class="ys-layout__content--center">
+						<ul>
+							<li>
+								<div class="content-image">
+									<img src="coolboy.jpg">
+								</div>
+								<div class="content-text">
+									<h3>TitleTitleTitleTitleTitle</h3>
+									<p>Information Information Information</p>
+									<p>ContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContent</p>
+								</div>
+							</li>
+							<li>
+								<div class="content-image">
+									<img src="coolboy.jpg">
+								</div>
+								<div class="content-text">
+									<h3>TitleTitleTitleTitleTitle</h3>
+									<p>Information Information Information</p>
+									<p>ContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContent</p>
+								</div>
+							</li>
+							<li>
+								<div class="content-image">
+									<img src="coolboy.jpg">
+								</div>
+								<div class="content-text">
+									<h3>TitleTitleTitleTitleTitle</h3>
+									<p>Information Information Information</p>
+									<p>ContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContent</p>
+								</div>
+							</li>
+							<li>
+								<div class="content-image">
+									<img src="coolboy.jpg">
+								</div>
+								<div class="content-text">
+									<h3>TitleTitleTitleTitleTitle</h3>
+									<p>Information Information Information</p>
+									<p>ContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContent</p>
+								</div>
+							</li>
+							<li>
+								<div class="content-image">
+									<img src="coolboy.jpg">
+								</div>
+								<div class="content-text">
+									<h3>TitleTitleTitleTitleTitle</h3>
+									<p>Information Information Information</p>
+									<p>ContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContent</p>
+								</div>
+							</li>
+							<li>
+								<div class="content-image">
+									<img src="coolboy.jpg">
+								</div>
+								<div class="content-text">
+									<h3>TitleTitleTitleTitleTitle</h3>
+									<p>Information Information Information</p>
+									<p>ContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContent</p>
+								</div>
+							</li>
+							<li>
+								<div class="content-image">
+									<img src="coolboy.jpg">
+								</div>
+								<div class="content-text">
+									<h3>TitleTitleTitleTitleTitle</h3>
+									<p>Information Information Information</p>
+									<p>ContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContentContent</p>
+								</div>
+							</li>
+						</ul>	
+					</div>
+			</div>
+			<div class="ys-layout__menu ys-layout__menu--left">
+				<ul>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu1</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu2</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu3</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu4</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu5</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu6</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu7</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu8</a>
+					</li>
+				</ul>
+			</div>
+			<div class="ys-layout__menu ys-layout__menu--right">
+				<ul>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu1</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu2</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu3</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu4</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu5</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu6</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu7</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu8</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu1</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu2</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu3</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu4</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu5</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu6</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu7</a>
+					</li>
+					<li class="ys-layout__menu-item">
+						<a href="javascript:;">Menu8</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('#change-layout').on('change',function(){
+				var val = $(this).val(),
+					layoutClass = $('#ys-layout').attr('class').split(' ')[1];
+				$('#ys-layout').removeClass(layoutClass).addClass('ys-'+ val +'-layout');
+				$('.ys-layout__header-row').removeClass('fixed fluid adaptive responsive').addClass(val);
+			});
+		});
+	</script>
+</body>
+</html>

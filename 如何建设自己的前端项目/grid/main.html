@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Main</title>
+	<style type="text/css">
+		body {
+		    background-color: #fff;
+		    color: #000;
+		    font-family: Arial;
+		    font-size: 14px;
+		    margin: 0;
+		}
+		a {
+		    color: #008;
+		    text-decoration: none;
+		}
+		a:hover {
+		    text-decoration: underline;
+		}
+		a.mode,
+		footer a {
+		    color: #00f;
+		}
+		header {
+		    margin: 20px 0 0 0;
+		}
+		#header_inner {
+		    background-color: #edd;
+		    border: 1px solid #800;
+		}
+		#menu_inner {
+		    background-color: #eed;
+		    border: 1px solid #880;
+		}
+		#article_inner {
+		    background-color: #ded;
+		    border: 1px solid #080;
+		}
+		#aside_inner {
+		    background-color: #dee;
+		    border: 1px solid #088;
+		}
+		footer {
+		    clear: both;
+		    margin: 0 0 20px 0;
+		}
+		#footer_inner {
+		    background-color: #dde;
+		    border: 1px solid #008;
+		}
+		#header_inner,
+		#menu_inner,
+		#article_inner,
+		#aside_inner,
+		#footer_inner {
+		    padding: 1px 20px;
+		}
+		header h1 {
+		    display: none;
+		}
+		.adaptive header h1#header_adaptive,
+		.liquid header h1#header_liquid,
+		.responsive header h1#header_responsive,
+		.static header h1#header_static {
+		    display: block;
+		}
+		#overview {
+		    border-top: 1px solid #080;
+		    border-bottom: 1px solid #080;
+		    zoom: 1;
+		}
+		#overview:after {
+		    clear: both;
+		    content: ".";
+		    display: block;
+		    height: 0;
+		    overflow: hidden;
+		}
+		#overview h1 {
+		    display: none;
+		}
+		#overview p {
+		    display: none;
+		}
+		#overview img {
+		    display: none;
+		    float: left;
+		    margin: 20px 20px 20px 0;
+		    width: 110px;
+		}
+		.adaptive #overview .overview_adaptive,
+		.liquid #overview .overview_liquid,
+		.responsive #overview .overview_responsive,
+		.static #overview .overview_static {
+		    display: block;
+		}
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		p {
+		    margin: 20px 0;
+		}
+		.block {
+		    clear: both;
+		    margin: 20px 0;
+		    zoom: 1;
+		}
+		.block:after {
+		    clear: both;
+		    content: ".";
+		    display: block;
+		    height: 0;
+		    overflow: hidden;
+		}
+		.block h3 {
+		    margin: 0;
+		}
+		.block p {
+		    margin: 0 0 20px 0;
+		}
+		.block p.meta {
+		    color: #888;
+		    font-size: 80%;
+		    margin: 0;
+		}
+		.adaptive header,
+		.responsive header {
+		    margin: 20px 0 0 0;
+		    padding: 0;
+		    position: relative;
+		}
+		@media all and (max-width: 719px) {
+		    .adaptive header select,
+		    .responsive header select {
+		        display: block;
+		        margin-bottom: 20px;
+		        width: 100%;
+		    }
+		}
+		@media all and (min-width: 720px) {
+		    .adaptive header select,
+		    .responsive header select {
+		        position: absolute;
+		        right: 20px;
+		        top: 20px;
+		    }
+		}
+		.adaptive menu,
+		.adaptive article,
+		.adaptive aside,
+		.adaptive footer,
+		.responsive menu,
+		.responsive article,
+		.responsive aside,
+		.responsive footer {
+		    margin: 20px 0;
+		    padding: 0;
+		}
+		@media all and (max-width: 719px) {
+		    .adaptive #overview #layout_1,
+		    .responsive #overview #layout_1 {
+		        display: block;
+		    }
+		}
+		@media all and (min-width: 720px) and (max-width: 959px) {
+		    .adaptive menu,
+		    .responsive menu {
+		        clear: left;
+		        float: left;
+		        width: 24.9%;
+		    }
+		    .adaptive article,
+		    .responsive article {
+		        clear: none;
+		        float: left;
+		        margin: 20px 0;
+		        width: 75%;
+		    }
+		    .adaptive article #article_inner,
+		    .responsive article #article_inner {
+		        margin: 0 0 0 20px;
+		    }
+		    .adaptive aside,
+		    .responsive aside {
+		        clear: both;
+		        float: none;
+		        width: 100%;
+		    }
+		    .adaptive #overview #layout_2,
+		    .responsive #overview #layout_2 {
+		        display: block;
+		    }
+		}
+		@media all and (min-width: 960px) {
+		    .adaptive menu,
+		    .responsive menu {
+		        clear: left;
+		        float: left;
+		        width: 17.5%;
+		    }
+		    .adaptive article,
+		    .responsive article {
+		        clear: none;
+		        float: left;
+		        margin: 20px 0;
+		        width: 64.9%;
+		    }
+		    .adaptive article #article_inner,
+		    .responsive article #article_inner {
+		        margin: 0 20px;
+		    }
+		    .adaptive aside,
+		    .responsive aside {
+		        clear: none;
+		        float: right;
+		        width: 17.5%;
+		    }
+		    .adaptive #overview #layout_3,
+		    .responsive #overview #layout_3 {
+		        display: block;
+		    }
+		}
+		.adaptive menu ul,
+		.responsive menu ul {
+		    margin: 20px 0;
+		    padding: 0;
+		}
+		.adaptive menu ul li,
+		.responsive menu ul li {
+		    list-style: none;
+		    margin: 0;
+		    padding: 0;
+		}
+		.adaptive menu ul li ul,
+		.responsive menu ul li ul {
+		    margin: 0 0 0 40px;
+		}
+		.adaptive article .block img,
+		.responsive article .block img {
+		    clear: left;
+		    float: left;
+		    width: 20%;
+		    zoom: 1;
+		}
+		.adaptive article .block .block_content,
+		.responsive article .block .block_content {
+		    clear: right;
+		    margin-left: 20.1%;
+		}
+		.adaptive article .block .block_content h3,
+		.adaptive article .block .block_content p,
+		.adaptive article .block .block_content a,
+		.responsive article .block .block_content h3,
+		.responsive article .block .block_content p,
+		.responsive article .block .block_content a {
+		    margin-left: 20px;
+		}
+		.adaptive article .block p.summary,
+		.responsive article .block p.summary {
+		    display: none;
+		}
+		.adaptive aside .block img,
+		.responsive aside .block img {
+		    display: none;
+		}
+		.adaptive aside .block p.main,
+		.responsive aside .block p.main {
+		    display: none;
+		}
+		@media all and (min-width: 720px) and (max-width: 959px) {
+		    .adaptive aside .block img,
+		    .responsive aside .block img {
+		        clear: left;
+		        display: block;
+		        float: left;
+		        width: 20%;
+		        zoom: 1;
+		    }
+		    .adaptive aside .block .block_content,
+		    .responsive aside .block .block_content {
+		        clear: right;
+		        margin-left: 20.1%;
+		    }
+		    .adaptive aside .block .block_content h3,
+		    .adaptive aside .block .block_content p,
+		    .adaptive aside .block .block_content a,
+		    .responsive aside .block .block_content h3,
+		    .responsive aside .block .block_content p,
+		    .responsive aside .block .block_content a {
+		        margin-left: 20px;
+		    }
+		    .adaptive aside .block p.summary,
+		    .responsive aside .block p.summary {
+		        display: none;
+		    }
+		    .adaptive aside .block p.main,
+		    .responsive aside .block p.main {
+		        display: block;
+		    }
+		}
+		@media all and (max-width: 719px) {
+		    .adaptive aside .block img,
+		    .responsive aside .block img {
+		        clear: left;
+		        display: block;
+		        float: left;
+		        width: 20%;
+		        zoom: 1;
+		    }
+		    .adaptive aside .block .block_content,
+		    .responsive aside .block .block_content {
+		        clear: right;
+		        margin-left: 20.1%;
+		    }
+		    .adaptive aside .block .block_content h3,
+		    .adaptive aside .block .block_content p,
+		    .adaptive aside .block .block_content a,
+		    .responsive aside .block .block_content h3,
+		    .responsive aside .block .block_content p,
+		    .responsive aside .block .block_content a {
+		        margin-left: 20px;
+		    }
+		}
+		.adaptive #page_wrapper {
+		    margin: 0 auto;
+		}
+		@media all and (max-width: 479px) {
+		    .adaptive #page_wrapper {
+		        width: 280px;
+		    }
+		}
+		@media all and (min-width: 480px) and (max-width: 719px) {
+		    .adaptive #page_wrapper {
+		        width: 440px;
+		    }
+		}
+		@media all and (min-width: 720px) and (max-width: 959px) {
+		    .adaptive #page_wrapper {
+		        width: 680px;
+		    }
+		}
+		@media all and (min-width: 960px) and (max-width: 1279px) {
+		    .adaptive #page_wrapper {
+		        width: 920px;
+		    }
+		}
+		@media all and (min-width: 1280px) {
+		    .adaptive #page_wrapper {
+		        width: 1240px;
+		    }
+		}
+		.liquid #page_wrapper {
+		    margin: 0 20px;
+		}
+		.liquid header,
+		.liquid footer {
+		    clear: both;
+		    width: 100%;
+		}
+		.liquid header {
+		    padding: 0;
+		    position: relative;
+		}
+		.liquid header select {
+		    position: absolute;
+		    right: 20px;
+		    top: 20px;
+		}
+		.liquid menu {
+		    clear: left;
+		    float: left;
+		    margin: 20px 0;
+		    padding: 0;
+		    width: 17.5%;
+		}
+		.liquid menu ul {
+		    margin: 20px 0;
+		    padding: 0;
+		}
+		.liquid menu ul li {
+		    list-style: none;
+		    margin: 0;
+		    padding: 0;
+		}
+		.liquid menu ul li ul {
+		    margin: 0 0 0 20%;
+		}
+		.liquid article {
+		    clear: none;
+		    float: left;
+		    margin: 20px 0;
+		    width: 64.9%;
+		}
+		.liquid article #article_inner {
+		    margin: 0 20px;
+		}
+		.liquid article .block img {
+		    clear: left;
+		    float: left;
+		    width: 20%;
+		    zoom: 1;
+		}
+		.liquid article .block .block_content {
+		    clear: right;
+		    margin-left: 20.1%;
+		}
+		.liquid article .block .block_content h3,
+		.liquid article .block .block_content p,
+		.liquid article .block .block_content a {
+		    margin-left: 20px;
+		}
+		.liquid article .block p.summary {
+		    display: none;
+		}
+		.liquid #overview #layout_3 {
+		    display: block;
+		}
+		.liquid aside {
+		    clear: right;
+		    float: right;
+		    margin: 20px 0;
+		    padding: 0;
+		    width: 17.5%;
+		}
+		.liquid aside .block img {
+		    display: none;
+		}
+		.liquid aside .block p.main {
+		    display: none;
+		}
+		.responsive #page_wrapper {
+		    margin: 0 20px;
+		}
+		.static #page_wrapper {
+		    margin: 0 auto;
+		    width: 960px;
+		}
+		.static header {
+		    padding: 0;
+		    position: relative;
+		}
+		.static header select {
+		    position: absolute;
+		    right: 20px;
+		    top: 20px;
+		}
+		.static menu,
+		.static aside {
+		    clear: none;
+		    float: left;
+		    margin: 20px 0;
+		    padding: 0;
+		    width: 200px;
+		    zoom: 1;
+		}
+		.static aside {
+		    float: right;
+		}
+		.static menu ul {
+		    margin: 20px 0;
+		    padding: 0;
+		}
+		.static menu ul li {
+		    list-style: none;
+		    margin: 0;
+		    padding: 0;
+		}
+		.static menu ul li ul {
+		    margin: 0 0 0 40px;
+		}
+		.static article {
+		    clear: none;
+		    float: left;
+		    margin: 20px;
+		    padding: 0;
+		    width: 520px;
+		}
+		.static article .block img {
+		    clear: left;
+		    float: left;
+		    width: 120px;
+		    zoom: 1;
+		}
+		.static article .block .block_content {
+		    clear: right;
+		    margin-left: 140px;
+		}
+		.static article .block p.summary {
+		    display: none;
+		}
+		.static #overview #layout_3 {
+		    display: block;
+		}
+		.static aside .block img {
+		    display: none;
+		}
+		.static aside .block p.main {
+		    display: none;
+		}
+		.static footer {
+		    clear: both;
+		    padding: 0;
+		}
+	</style>
+</head>
+<body>
+<div id="page_wrapper">
+    <header>
+        <div id="header_inner">
+            <h1 id="header_adaptive">自适应布局（Adaptive）</h1>
+            <h1 id="header_liquid">流式布局（Liquid）</h1>
+            <h1 id="header_responsive">响应式布局（Responsive）</h1>
+            <h1 id="header_static">静态布局（Static）</h1>
+
+            <select>
+                <option value="adaptive">Adaptive</option>
+                <option value="liquid">Liquid</option>
+                <option value="responsive" selected="selected">Responsive</option>
+                <option value="static">Static</option>
+            </select>
+        </div>
+    </header>
+
+    <div id="content_wrapper">
+        <menu>
+            <div id="menu_inner">
+                <ul class="menu_1">
+                    <li class="menu_1">
+                        <a href="#" class="menu_1" title="Dummy placeholder link. This doesn't go anywhere.">Menu 1</a>
+                        <ul class="menu_2">
+                            <li class="menu_2">
+                                <a href="#" class="menu_2" title="Dummy placeholder link. This doesn't go anywhere.">Menu 1 a</a>
+                            </li>
+                            <li class="menu_2">
+                                <a href="#" class="menu_2" title="Dummy placeholder link. This doesn't go anywhere.">Menu 1 b</a>
+                            </li>
+                            <li class="menu_2">
+                                <a href="#" class="menu_2" title="Dummy placeholder link. This doesn't go anywhere.">Menu 1 c</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu_1">
+                        <a href="#" class="menu_1" title="Dummy placeholder link. This doesn't go anywhere.">Menu 2</a>
+                        <ul class="menu_2">
+                            <li class="menu_2">
+                                <a href="#" class="menu_2" title="Dummy placeholder link. This doesn't go anywhere.">Menu 2 a</a>
+                            </li>
+                            <li class="menu_2">
+                                <a href="#" class="menu_2" title="Dummy placeholder link. This doesn't go anywhere.">Menu 2 b</a>
+                            </li>
+                            <li class="menu_2">
+                                <a href="#" class="menu_2" title="Dummy placeholder link. This doesn't go anywhere.">Menu 2 c</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu_1">
+                        <a href="#" class="menu_1" title="Dummy placeholder link. This doesn't go anywhere.">Menu 3</a>
+                        <ul class="menu_2">
+                            <li class="menu_2">
+                                <a href="#" class="menu_2" title="Dummy placeholder link. This doesn't go anywhere.">Menu 3 a</a>
+                            </li>
+                            <li class="menu_2">
+                                <a href="#" class="menu_2" title="Dummy placeholder link. This doesn't go anywhere.">Menu 3 b</a>
+                            </li>
+                            <li class="menu_2">
+                                <a href="#" class="menu_2" title="Dummy placeholder link. This doesn't go anywhere.">Menu 3 c</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </menu>
+
+        <div id="article_aside_wrapper">
+            <article>
+                <div id="article_inner">
+                    <div id="intro">
+                        <h1>How To Use</h1>
+
+                        <p>
+                            有没有想过自适应、响应式以及流式布局之间的差异，是不是有人解释过但仍然模糊不清?
+                        </p>
+
+                        <p>
+                            从布局下拉列表中选择一个，然后尝试调整窗口的宽度，仔细观察布局的变动。自己实际观察得来的差别才是最清楚的！
+                        </p>
+                    </div>
+
+                    <div id="overview">
+                        <img src="/uploads/141015/layout_1.gif" alt="Single Column Layout" id="layout_1" />
+                        <img src="/uploads/141015/layout_2.gif" alt="Two Column Layout" id="layout_2" />
+                        <img src="/uploads/141015/layout_3.gif" alt="Three Column Layout" id="layout_3" />
+
+                        <h1 class="overview_adaptive">Adaptive</h1>
+
+                        <p class="overview_adaptive">
+                            自适应布局（Adaptive）的特点是分别为不同的屏幕分辨率定义布局。布局切换时页面元素发生改变，但在每个布局中，页面元素不随窗口大小的调整发生变化。
+                        </p>
+
+                        <p class="overview_adaptive">
+                            你可以把自适应布局看作是<a href="#" class="mode" rel="static" title="Change to Static">静态布局</a>的一个系列。
+                        </p>
+
+                        <h1 class="overview_liquid">Liquid</h1>
+
+                        <p class="overview_liquid">
+                            流式布局（Liquid）的特点（也叫"Fluid") 是页面元素的宽度按照屏幕进行适配调整，主要的问题是如果屏幕尺度跨度太大，那么在相对其原始设计而言过小或过大的屏幕上不能正常显示。
+                        </p>
+
+                        <h1 class="overview_responsive">Responsive</h1>
+
+                        <p class="overview_responsive">
+                            响应式布局（Responsive）的特点是分别为不同的屏幕分辨率定义布局，同时，在每个布局中，应用流式布局的理念，即页面元素宽度随着窗口调整而自动适配。
+                        </p>
+
+                        <p class="overview_responsive">
+                            可以把响应式布局看作是<a href="#" class="mode" rel="liquid" title="Change to Liquid">流式布局</a>和自适应布局设计理念的融合。
+                        </p>
+
+                        <h1 class="overview_static">Static</h1>
+
+                        <p class="overview_static">
+                            静态布局就是传统的网站形式：对于PC设计一个居中布局，窗口缩小时，内容被遮挡，呈现横竖向滚动条。对于移动设备，单独建立一个m.域名及相应的移动网站。
+                        </p>
+                    </div>
+
+                    <!-- Start: Single Block -->
+                    <div class="block">
+                        <div class="block_inner">
+                            <img src="/assets/coolboy.jpg" />
+                            <div class="block_content">
+                                <h3>Title</h3>
+                                <p class="meta">Month dd, yyyy</p>
+                                <p class="summary">
+                                    Summary summary summary summary summary summary
+                                </p>
+                                <p class="main">
+                                    Content content content content content content content content content content content content content content content content
+                                </p>
+                                <a href="#" title="Dummy placeholder link. This doesn't go anywhere.">Link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: Single Block -->
+
+                    <!-- Start: Single Block -->
+                    <div class="block">
+                        <div class="block_inner">
+                            <img src="/assets/coolboy.jpg" />
+                            <div class="block_content">
+                                <h3>Title</h3>
+                                <p class="meta">Month dd, yyyy</p>
+                                <p class="summary">
+                                    Summary summary summary summary summary summary
+                                </p>
+                                <p class="main">
+                                    Content content content content content content content content content content content content content content content content
+                                </p>
+                                <a href="#" title="Dummy placeholder link. This doesn't go anywhere.">Link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: Single Block -->
+
+                    <!-- Start: Single Block -->
+                    <div class="block">
+                        <div class="block_inner">
+                            <img src="/assets/coolboy.jpg" />
+                            <div class="block_content">
+                                <h3>Title</h3>
+                                <p class="meta">Month dd, yyyy</p>
+                                <p class="summary">
+                                    Summary summary summary summary summary summary
+                                </p>
+                                <p class="main">
+                                    Content content content content content content content content content content content content content content content content
+                                </p>
+                                <a href="#" title="Dummy placeholder link. This doesn't go anywhere.">Link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: Single Block -->
+
+                    <!-- Start: Single Block -->
+                    <div class="block">
+                        <div class="block_inner">
+                            <img src="/assets/coolboy.jpg" />
+                            <div class="block_content">
+                                <h3>Title</h3>
+                                <p class="meta">Month dd, yyyy</p>
+                                <p class="summary">
+                                    Summary summary summary summary summary summary
+                                </p>
+                                <p class="main">
+                                    Content content content content content content content content content content content content content content content content
+                                </p>
+                                <a href="#" title="Dummy placeholder link. This doesn't go anywhere.">Link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: Single Block -->
+
+                    <!-- Start: Single Block -->
+                    <div class="block">
+                        <div class="block_inner">
+                            <img src="/assets/coolboy.jpg" />
+                            <div class="block_content">
+                                <h3>Title</h3>
+                                <p class="meta">Month dd, yyyy</p>
+                                <p class="summary">
+                                    Summary summary summary summary summary summary
+                                </p>
+                                <p class="main">
+                                    Content content content content content content content content content content content content content content content content
+                                </p>
+                                <a href="#" title="Dummy placeholder link. This doesn't go anywhere.">Link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: Single Block -->
+                </div>
+            </article>
+
+            <aside>
+                <div id="aside_inner">
+                    <!-- Start: Single Block -->
+                    <div class="block">
+                        <div class="block_inner">
+                            <img src="/assets/coolboy.jpg" />
+                            <div class="block_content">
+                                <h3>Title</h3>
+                                <p class="meta">Month dd, yyyy</p>
+                                <p class="summary">
+                                    Summary summary summary summary summary summary
+                                </p>
+                                <p class="main">
+                                    Content content content content content content content content content content content content content content content content
+                                </p>
+                                <a href="#" title="Dummy placeholder link. This doesn't go anywhere.">Link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: Single Block -->
+
+                    <!-- Start: Single Block -->
+                    <div class="block">
+                        <div class="block_inner">
+                            <img src="/assets/coolboy.jpg" />
+                            <div class="block_content">
+                                <h3>Title</h3>
+                                <p class="meta">Month dd, yyyy</p>
+                                <p class="summary">
+                                    Summary summary summary summary summary summary
+                                </p>
+                                <p class="main">
+                                    Content content content content content content content content content content content content content content content content
+                                </p>
+                                <a href="#" title="Dummy placeholder link. This doesn't go anywhere.">Link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: Single Block -->
+
+                    <!-- Start: Single Block -->
+                    <div class="block">
+                        <div class="block_inner">
+                            <img src="/assets/coolboy.jpg" />
+                            <div class="block_content">
+                                <h3>Title</h3>
+                                <p class="meta">Month dd, yyyy</p>
+                                <p class="summary">
+                                    Summary summary summary summary summary summary
+                                </p>
+                                <p class="main">
+                                    Content content content content content content content content content content content content content content content content
+                                </p>
+                                <a href="#" title="Dummy placeholder link. This doesn't go anywhere.">Link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: Single Block -->
+
+                    <!-- Start: Single Block -->
+                    <div class="block">
+                        <div class="block_inner">
+                            <img src="/assets/coolboy.jpg" />
+                            <div class="block_content">
+                                <h3>Title</h3>
+                                <p class="meta">Month dd, yyyy</p>
+                                <p class="summary">
+                                    Summary summary summary summary summary summary
+                                </p>
+                                <p class="main">
+                                    Content content content content content content content content content content content content content content content content
+                                </p>
+                                <a href="#" title="Dummy placeholder link. This doesn't go anywhere.">Link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: Single Block -->
+
+                    <!-- Start: Single Block -->
+                    <div class="block">
+                        <div class="block_inner">
+                            <img src="/assets/coolboy.jpg" />
+                            <div class="block_content">
+                                <h3>Title</h3>
+                                <p class="meta">Month dd, yyyy</p>
+                                <p class="summary">
+                                    Summary summary summary summary summary summary
+                                </p>
+                                <p class="main">
+                                    Content content content content content content content content content content content content content content content content
+                                </p>
+                                <a href="#" title="Dummy placeholder link. This doesn't go anywhere.">Link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: Single Block -->
+                </div>
+            </aside>
+        </div>
+    </div>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript">
+    	jQuery(document).ready(function() {
+		    jQuery('select').change(function() {
+		        jQuery('select option').each(function(index, el) {
+		            jQuery('body').removeClass(jQuery(el).attr('value'));
+		        });
+		        jQuery('body').addClass(jQuery('select').val());
+		    });
+
+		    jQuery('select option').each(function(index, el) {
+		        jQuery('body').removeClass(jQuery(el).attr('value'));
+		    });
+		    jQuery('body').addClass(jQuery('select').val());
+
+		    jQuery('menu a, article a, aside a').click(function(e) {
+		        e.preventDefault();
+		    });
+
+		    jQuery('a.mode').click(function(e) {
+		        var rel = jQuery(this).attr('rel');
+		        jQuery('select').val(rel);
+		        jQuery('select option').each(function(index, el) {
+		            jQuery('body').removeClass(jQuery(el).attr('value'));
+		        });
+		        jQuery('body').addClass(jQuery('select').val());
+		    });
+		});
+    </script>
+</body>
+</html>
