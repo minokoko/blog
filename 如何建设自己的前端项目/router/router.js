@@ -4,56 +4,74 @@
 		解决方案：hash+hashChange / hTML5 history API
   */
 (function(w){
-	var _getPath = function(hash){
-		var paths = hash.split('#'),
-			path = '';
-		if(paths.length>1){
-			path = paths[1].split('?')[0];
+	var _getPathQuery = function(){
+		var pathDetail = window.location.hash.replace(/.*#/,'').split('?'),
+			path = pathDetail[0]?pathDetail[0]:'/',
+			params = pathDetail[1]?pathDetail[1].split('&'):[],
+			query = {};
+		for(var i=0;i<params.length;i++){
+			var item = params[i].split('=');
+				query[item[0]] = item[1];
 		}
-		return path;
-	};
-	var _getQuery = function(hash){
-		var paths = hash.split('#'),
-			query = null;
-		if(){
-			
-		}
-
+		return {
+			path: path,
+			query: [query]
+		};
 	};
 	function YsRouters(){
 		this.routers = {}; //页面路径存储{key[path]:value[object]}
+		this.defaultAction = null;
+
+		this.init();
 	}
 	// Router 对象初始化 url change 监听
 	YsRouters.prototype.init = function(){
-		window.addEventListener('hashChange',function(){
-
+		var that = this;
+		window.addEventListener('hashchange',function(){
+			that.urlChange();
 		},false);
 
 		window.addEventListener('load',function(){
-
+			that.urlChange();
 		},false);
 	};
 	// Router 注册path
-	YsRouters.prototype.map = function(path,callback){
+	YsRouters.prototype.map = function(map){
 		var that = this,
-			path = path.replace(/\s*/g,'');
-		that.routers[path] = {
-			fn: null
-		};
-		if(Object.prototype.toString.call(callback) === '[object Function]'){
-			that.routers[path].callback = callback;
+			defaultAction = map['/'];
+		if(defaultAction){
+			that.defaultAction = defaultAction;
 		}
-
+		this.routers = map;
 	};
 	//path 改变触发回调方法
 	YsRouters.prototype.urlChange = function(){
-		var hash = window.location.hash,
-			path = _getPath(hash),
-			query = _getQuery(hash);
+		var currentUrl = _getPathQuery();
+		if(this.routers[currentUrl.path]){
+			var action = this.routers[currentUrl.path];
+			action && action.call(null,currentUrl);
+		}else{
+			this.defaultAction();
+		}
 	};
 	//资源加载方法
-	YsRouters.prototype.loadAsset = function(){
+	YsRouters.prototype.loadAsset = function(file,urlParam){
+		var that = this,
+			router = that.routers[urlParam.path],
+			query = urlParam.query;
 
+		if(router.fn){
+
+		}else{
+			var scriptEle = document.createElement('script');
+				scriptEle.type = 'text/javascript';
+				scriptEle.src = file;
+				scriptEle.onload = function(){
+					console.log('下载'+file+'完成');
+					router.fn = true;
+				};
+			document.getElementsByTagName('body')[0].appendChild(scriptEle);
+		}
 	};
 
 	window.ysRouters = new YsRouters();

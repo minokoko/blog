@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="javascript" />
+<title>Javascript实现前端简单路由</title>
+<script type="text/javascript" src="router.js"></script>
+<style>
+.text-right{
+	list-style: none;
+}
+.text-right:after{
+	content: '';
+	display: block;
+	visibility: hidden;
+	clear: both;
+}
+.text-right li{
+	float: left;
+	padding: 10px;
+}
+#result{background: #f0f;height: 200px; line-height: 200px; font-size: 2rem; text-align: center; color:#fff;}
+</style>
+</head>
+<body>
+<div class="container">
+	<header>
+	</header>
+	<div class="row main" style="min-height:500px">
+		<div class="col-md-12">
+			<h2 class="top_title">Javascript实现前端简单路由</h2>
+			
+			<div class="row" style="margin-top:30px">
+				<div class="col-md-3">
+					<ul class="text-right"> 
+				        <li><a href="#/">首页</a></li> 
+				        <li><a href="#/product?id=2&shop_id=2">产品</a></li> 
+				        <li><a href="#/club?l=1111">论坛</a></li>
+				        <li><a href="#/server?sid=3&user_id=1">服务</a></li> 
+				        <li><a href="#/about?user=all">关于我们</a></li> 
+				    </ul>
+				</div>
+				<div class="col-md-7">
+					<div id="result">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	ysRouters.map({
+		'/product':function(urlParam){
+			document.getElementById('result').innerHTML = '产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品';
+			ysRouters.loadAsset('index1.js',urlParam);
+		},
+		'/server':function(urlParam){
+			document.getElementById('result').innerHTML = '服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务';
+			ysRouters.loadAsset('index2.js',urlParam);
+		},
+		'/club':function(urlParam){
+			document.getElementById('result').innerHTML = '论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛';
+		},
+		'/about':function(urlParam){
+			document.getElementById('result').innerHTML = '关于我们关于我们关于我们关于我们关于我们关于我们关于我们关于我们关于我们关于我们';
+		},
+		'/':function(query){
+			document.getElementById('result').innerHTML = '首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页';
+		}
+	});
+</script>
+</body>
+</html>
