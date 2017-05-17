@@ -44,7 +44,7 @@
 				</div>
 				<div class="col-md-7">
 					<div id="result">
-
+						shallow 
 					</div>
 				</div>
 			</div>
@@ -52,23 +52,64 @@
 	</div>
 </div>
 <script type="text/javascript">
+	// ysRouters.map({
+	// 	'/product':function(urlParam){
+	// 		document.getElementById('result').innerHTML = '产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品';
+	// 		ysRouters.loadAsset('index1.js',urlParam);
+	// 	},
+	// 	'/server':function(urlParam){
+	// 		document.getElementById('result').innerHTML = '服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务';
+	// 		ysRouters.loadAsset('index2.js',urlParam);
+	// 	},
+	// 	'/club':function(urlParam){
+	// 		document.getElementById('result').innerHTML = '论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛';
+	// 	},
+	// 	'/about':function(urlParam){
+	// 		document.getElementById('result').innerHTML = '关于我们关于我们关于我们关于我们关于我们关于我们关于我们关于我们关于我们关于我们';
+	// 	},
+	// 	'/':function(query){
+	// 		document.getElementById('result').innerHTML = '首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页';
+	// 	}
+	// });
+
 	ysRouters.map({
-		'/product':function(urlParam){
-			document.getElementById('result').innerHTML = '产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品';
-			ysRouters.loadAsset('index1.js',urlParam);
+		'/product':{
+			template:'',
+			templateUrl:'',
+			action: function(urlParam){
+				console.log(urlParam);
+				document.getElementById('result').innerHTML = '产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品';
+				ysRouters.loadAsset('index1.js',urlParam);
+			}
 		},
-		'/server':function(urlParam){
-			document.getElementById('result').innerHTML = '服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务';
-			ysRouters.loadAsset('index2.js',urlParam);
+		'/server':{
+			template:'',
+			templateUrl:'',
+			action: function(urlParam){
+				document.getElementById('result').innerHTML = '服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务服务';
+				ysRouters.loadAsset('index2.js',urlParam);
+			}
 		},
-		'/club':function(urlParam){
-			document.getElementById('result').innerHTML = '论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛';
+		'/club':{
+			template:'',
+			templateUrl:'',
+			action: function(urlParam){
+				document.getElementById('result').innerHTML = '论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛论坛';
+			}
 		},
-		'/about':function(urlParam){
-			document.getElementById('result').innerHTML = '关于我们关于我们关于我们关于我们关于我们关于我们关于我们关于我们关于我们关于我们';
+		'/about':{
+			template:'',
+			templateUrl:'',
+			action: function(urlParam){
+				document.getElementById('result').innerHTML = '关于我们关于我们关于我们关于我们关于我们关于我们关于我们关于我们关于我们关于我们';
+			}
 		},
-		'/':function(query){
-			document.getElementById('result').innerHTML = '首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页';
+		'/':{
+			template:'',
+			templateUrl:'',
+			action: function(urlParam){
+				document.getElementById('result').innerHTML = '首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页';
+			}
 		}
 	});
 </script>

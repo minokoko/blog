@@ -4,6 +4,9 @@
 		解决方案：hash+hashChange / hTML5 history API
   */
 (function(w){
+	var _isFun = function(fun){
+		return (Object.prototype.toString.call(fun) === '[object Function]');
+	};
 	var _getPathQuery = function(){
 		var pathDetail = window.location.hash.replace(/.*#/,'').split('?'),
 			path = pathDetail[0]?pathDetail[0]:'/',
@@ -18,6 +21,7 @@
 			query: [query]
 		};
 	};
+
 	function YsRouters(){
 		this.routers = {}; //页面路径存储{key[path]:value[object]}
 		this.defaultAction = null;
@@ -36,6 +40,7 @@
 		},false);
 	};
 	// Router 注册path
+	// 参数传递形式：[:name]/path/[value]
 	YsRouters.prototype.map = function(map){
 		var that = this,
 			defaultAction = map['/'];
@@ -44,12 +49,28 @@
 		}
 		this.routers = map;
 	};
+	YsRouters.prototype.when = function(path,opt){
+		var that = this,
+			path = path?path:'/';
+
+		if(!that.routers.hasOwnProperty(path)){
+			that.routers[path] = {
+				action: opt.action,
+				regPath
+				query:_getQuery(path)
+			}
+		}
+
+		return this;
+	};
 	//path 改变触发回调方法
 	YsRouters.prototype.urlChange = function(){
 		var currentUrl = _getPathQuery();
 		if(this.routers[currentUrl.path]){
-			var action = this.routers[currentUrl.path];
-			action && action.call(null,currentUrl);
+			var routeItem = this.routers[currentUrl.path];
+			if(_isFun(routeItem.action)){
+				routeItem.action && routeItem.action.call(null,currentUrl);
+			}
 		}else{
 			this.defaultAction();
 		}
