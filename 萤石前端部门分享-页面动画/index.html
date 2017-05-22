@@ -9,6 +9,60 @@
                 color: #fff;
                 background: #4caf50;
             }
+            .cus-nav{
+                position: fixed;
+                bottom: 0;
+                -webkit-transform: -webkit-translate(0,-50%);
+                -moz-transform: -moz-translate(0,-50%);
+                transform: translate(0,-50%);
+                left: 20px;
+                text-align: center;
+                vertical-align: middle;
+                    pointer-events: auto !important;
+            }
+            .cus-nav-inner{
+                display: inline-block;
+            }
+            .cus-nav-item{
+                float: left;
+                width: 15px;
+                height: 15px;
+                margin: 10px;
+                border: 2px solid #fff;
+                box-sizing: border-box;
+                border-radius: 50%;
+                cursor: pointer;
+
+                -webkit-transition: all .25s;
+                -moz-transition: all .25s;
+                transition: all .25s;
+            }
+            .cus-nav-item:not(.active):hover{
+                border: 1px solid #dedede;
+            }
+            .cus-nav-item.active{
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(255, 255, 255,.3), 0 0 3px rgba(255, 255, 255, .8);
+            }
+            .desc{
+                position: absolute;
+                width: 385px;
+                bottom: 30px;
+                height: 30px;
+                line-height: 30px;
+                vertical-align: middle;
+                text-align: left;
+                visibility: hidden;
+
+                opacity: 0;
+
+                -webkit-transition: all .25s;
+                transition: all .25s;
+            }
+            .cus-nav-item:hover .desc{
+                    visibility: visible;
+                    opacity: 1;
+            }
             .cube h1,.angle h1 {
                 font-weight:bold;
                 border-bottom:3px solid black;
@@ -109,9 +163,70 @@
                 height: 40px;
                 font-size: 24px;
             }
+
         </style>
+        <script type="text/javascript" src="lib/jquery.min.js"></script>
     </head>
     <body>
+        <div class="cus-nav">
+            <div class="cus-nav-inner">
+                <div class="cus-nav-item" data-index="0">
+                    <div class="desc">
+                        页面动画效果应用
+                    </div>
+                </div>
+                <div class="cus-nav-item" data-index="2">
+                    <div class="desc">
+                        Why
+                    </div>
+                </div>
+                <div class="cus-nav-item" data-index="5">
+                    <div class="desc">
+                        动画的作用
+                    </div>
+                </div>
+                <div class="cus-nav-item" data-index="6">
+                    <div class="desc">
+                        动画应用场景
+                    </div>
+                </div>
+                <div class="cus-nav-item" data-index="9">
+                    <div class="desc">
+                        动画实现
+                    </div>
+                </div>
+                <div class="cus-nav-item" data-index="10">
+                    <div class="desc">
+                        JS动画
+                    </div>
+                </div>
+                <div class="cus-nav-item" data-index="11">
+                    <div class="desc">
+                        CSS3动画
+                    </div>
+                </div>
+                <div class="cus-nav-item" data-index="12">
+                    <div class="desc">
+                        HTML5动画
+                    </div>
+                </div>
+                <div class="cus-nav-item" data-index="14">
+                    <div class="desc">
+                        实现的动画，需要认真考虑的几个方面
+                    </div>
+                </div>
+                <div class="cus-nav-item" data-index="15">
+                    <div class="desc">
+                        常用动画效果/工具
+                    </div>
+                </div>
+                <div class="cus-nav-item" data-index="overview">
+                    <div class="desc">
+                        缩略
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="impress-not-supported">
             <div class="fallback-message">
                 <p>你的浏览器<b>不支持</b> impress.js, 所以当前展示的是简化版。</p>
@@ -222,7 +337,7 @@
                             <li>1、浏览器对动画的支持、标准不统一</li>
                             <li>2、繁复的动画效果带来的性能问题</li>
                             <li>3、设计合适符合场景的动画效果</li>
-                            <li>4、沟通，是否能够准确无误把握董爱虎需求</li>
+                            <li>4、沟通，是否能够准确无误把握动画需求</li>
                             <li>5、动画效果的实现方式</li>
                         </ul>
                 </div>
@@ -235,7 +350,7 @@
                         </ul>
                 </div>
             </div>
-            <div class="step" data-x="1000" data-y="800" data-scale="0.5">
+            <div class="step" data-x="800" data-y="800" data-scale="0.5">
                 <h1>
                     实现动画
                 </h1>
@@ -351,6 +466,16 @@
                     </ul>
                 </div>
             </div>
+            <div class="step" data-x="1600" data-y="1400" data-scale="0.5">
+                <div class="text">
+                    <h1>动画效果常用工具分类</h1>
+                    <ul>
+                        <li>页面效果增强，<a href="https://daneden.github.io/animate.css/" target="_blank">Animate Css</a>/<a href="http://ianlunn.github.io/Hover/" target="_blank">Hover Css</a>/<a href="http://www.bootcss.com/p/unslider/" target="_blank">Image Slider</a>......</li>
+                        <li>动画效果控制，<a href="https://visionmedia.github.io/move.js/" target="_blank">Move Js</a>/<a href="http://anime-js.com/" target="_blank">Anime Js</a></li>
+                        <li>大型动画库，<a href="http://velocityjs.org/" target="_blank">Velocityjs</a>/<a href="https://www.egret.com/" target="_blank">白鹭</a></li>
+                    </ul>
+                </div>
+            </div>
             <div class="step" data-x="1000" data-y="1400" data-scale="0.5">
                 <h1>写在最后</h1>
                 <h2>不为动而动</h2>
@@ -363,8 +488,21 @@
             </div>
             <!-- darren code -->
             <div id="overview" class="step" data-x="600" data-y="500" data-scale="2"></div>
+            
         </div>
+       
         <script src="lib/impress/impress.js"></script>
-        <script>impress().init();</script>
+        <script>
+            var impress = impress();
+            impress.init();
+            $(function(){
+                $('.cus-nav-item').on('click', function(){
+                    var $ele = $(this),
+                        index = $ele.data('index');
+                    console.log(index);
+                    impress.goto(index);
+                });
+            });
+        </script>
     </body>
 </html>
