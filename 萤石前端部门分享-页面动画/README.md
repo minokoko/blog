@@ -239,4 +239,4 @@ DOM节点变换
 
 
 内容总结  
-[实现动画效果](https://github.com/careycui/blog/blob/master/%E8%90%A4%E7%9F%B3%E5%89%8D%E7%AB%AF%E9%83%A8%E9%97%A8%E5%88%86%E4%BA%AB-%E9%A1%B5%E9%9D%A2%E5%8A%A8%E7%94%BB/asset/liucheng.png)
+![实现动画效果](https://github.com/careycui/blog/blob/master/%E8%90%A4%E7%9F%B3%E5%89%8D%E7%AB%AF%E9%83%A8%E9%97%A8%E5%88%86%E4%BA%AB-%E9%A1%B5%E9%9D%A2%E5%8A%A8%E7%94%BB/asset/liucheng.png)
