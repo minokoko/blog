@@ -476,6 +476,13 @@
                     </ul>
                 </div>
             </div>
+            <div class="step" data-x="1600" data-y="1000" data-scale="0.5">
+                <h1>小技巧</h1>
+                <ul>
+                    <li>1、技巧、创意、导演，共同完成</li>
+                    <li>2、三拆二算一画</li>
+                </ul>
+            </div>
             <div class="step" data-x="1000" data-y="1400" data-scale="0.5">
                 <h1>写在最后</h1>
                 <h2>不为动而动</h2>
@@ -499,7 +506,6 @@
                 $('.cus-nav-item').on('click', function(){
                     var $ele = $(this),
                         index = $ele.data('index');
-                    console.log(index);
                     impress.goto(index);
                 });
             });

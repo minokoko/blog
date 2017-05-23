@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<title>理解CSS3中的视点</title>
+	<style type="text/css">
+		html,body{
+			margin:0;
+			padding:0;
+			height: 100%;
+		}
+		.pwhole{
+			position:relative;
+			width:100%;
+			height:100%;
+			margin:0 auto;
+			background-color: #efefef;
+		}
+		.content{
+			position: absolute;
+			left:50%;
+			margin-left: -480px;
+			width:960px;
+		}
+		.content:after{
+			content:'';
+			display: block;
+			visibility:hidden;
+			clear:both;
+		}
+		.side{
+			float:left;
+			width:30%;
+			height: 600px;
+		}
+		.side button{
+			display:block;
+			margin:15px auto;
+		}
+		.article{
+			margin-left: 30%;
+			width:70%;
+		}
+		.stage{
+			margin: 50px auto 0;
+			padding:120px 0;
+			width:400px;
+			height: 300px;
+			line-height: 300px;
+			vertical-align: middle;
+			border:1px solid #ccc;
+			box-sizing:border-box;
+			-webkit-perspective:300px;
+			perspective:300px;
+		}
+		.stage .demo-box{
+			margin: 0 auto;
+			width: 50px;
+			height: 50px;
+			background-color: #336699;
+
+			-webkit-transform:translateZ(100px);
+			-moz-transform:translateZ(100px);
+			-ms-transform:translateZ(100px);
+			-o-transform:translateZ(100px);
+			transform:translateZ(100px);
+
+			-webkit-transition:transform .5s;
+			-moz-transition:transform .5s;
+			-ms-transition:transform .5s;
+			-o-transition:transform .5s;
+			transition:transform .5s;
+		}
+		.stage-style{
+			position:relative;
+			margin: 50px auto 0;
+			width:400px;
+			height: 300px;
+			line-height: 300px;
+			vertical-align: middle;
+			border:1px solid #ccc;
+			box-sizing:border-box;
+		}
+		.third-style{
+			-webkit-transform-style:preserve-3d;
+			transform-style:preserve-3d;
+		}
+		.perspective-style{
+			-webkit-perspective:300px;
+			perspective:300px;
+		}
+		.demo-style{
+			position:absolute;
+			top:50%;
+			left:50%;
+			margin-top:-50px;
+			margin-left: -50px;
+			width: 100px;
+			height: 100px;
+		}
+		.style1{
+			background-color: #00f;
+			-webkit-transform:rotateY(0deg);
+			-moz-transform:rotateY(0deg);
+			-ms-transform:rotateY(0deg);
+			-o-transform:rotateY(0deg);
+			transform:rotateY(0deg);
+		}
+		.style2{
+			background-color: #0ff;
+			margin-top: -40px;
+
+			-webkit-transform:rotateY(-45deg);
+			-moz-transform:rotateY(-45deg);
+			-ms-transform:rotateY(-45deg);
+			-o-transform:rotateY(-45deg);
+			transform:rotateY(-45deg);
+		}
+		.back-a{
+			margin-left: 50px;
+		}
+	</style>
+</head>
+<body>
+	<div class="pwhole">
+		<a href="javascript:;" onclick="history.go(-1);" class="back-a">Back</a>
+		<div class="content">
+			<div class="side">
+				<button class="setTranslate btn btn-default" data-num="-300">translateZ(-300)</button>
+				<button class="setTranslate btn btn-default" data-num="-200">translateZ(-200)</button>
+				<button class="setTranslate btn btn-default" data-num="-100">translateZ(-100)</button>
+				<button class="setTranslate btn btn-default" data-num="0">translateZ(0)</button>
+				<button class="setTranslate btn btn-default" data-num="100">translateZ(100)</button>
+				<button class="setTranslate btn btn-default" data-num="200">translateZ(200)</button>
+				<button class="setTranslate btn btn-default" data-num="300">translateZ(300)</button>
+				<div class="line color-blue"></div>
+				<button class="btn btn-default" id="toggle-third">Toggle 3D</button>
+				<button class="btn btn-default" id="toggle-perspective">Toggle Perspective</button>
+			</div>
+			<div class="article">
+				<div class="info">
+					perspective : 300px translateZ : <span class="info-z">100px</span> px
+				</div>
+				<div class="stage">
+					<div class="demo-box">
+					</div>
+				</div>
+				<div class="line color-blue"></div>
+				<div class="info">
+					transform-style : <span class="info-style">Remove</span>, perspective : <span class="info-p">0px</p>
+				</div>
+				<div class="stage-style">
+					<div class="demo-style style1">
+					</div>
+					<div class="demo-style style2">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../lib/jquery.min.js"></script>
+	<script>
+		(function(){
+			var div = document.createElement('div'),
+				    style = div.style,
+				    animationNames = ['animation','WebkitAnimation','OAnimation','msAnimation','MozAnimation'],
+				    /**
+				     * 通过style对象获取正确的 animation 名称
+				     * @return { String || Boolean }  animation 名称
+				     */
+				    animationName = (function(){
+				        var i = 0,
+				            len = animationNames.length,
+				            name,
+				            u = void 0;
+				        for ( ; i < len ; i++) {
+				            name = animationNames[i];
+				            if ( style[name] !== u ) return name;
+				        }
+				        return false;
+				    })(),
+				    //真实的animationend
+				    aniEndName = {
+				            animation : 'animationEnd',
+				            WebkitAnimation : 'webkitAnimationEnd', 
+				            OAnimation : 'oAnimationEnd', 
+				            msAnimation : 'MSAnimationEnd',
+				            MozAnimation : 'mozAnimationEnd'
+				        }[ animationName ];
+				    //真实的animationStart
+				    aniStartName = {
+				    		animation : 'animationStart',
+				            WebkitAnimation : 'webkitAnimationStart', 
+				            OAnimation : 'oAnimationStart', 
+				            msAnimation : 'MSAnimationStart',
+				            MozAnimation : 'mozAnimationStart'
+				    }[ animationName ];
+				    console.log(animationName,aniEndName);
+				    console.log(animationName,aniStartName)
+		})();
+
+		$(function(){
+			$('.setTranslate').on('click',function(){
+				var num = $(this).data('num');
+				$('.demo-box').css({
+					webkitTransform:'translateZ('+num+'px)',
+					transform:'translateZ('+num+'px)'
+				});
+				$('.info-z').text(num);
+			});
+			$('#toggle-third').on('click',function(){
+				$('.stage-style').toggleClass('third-style');
+				if($('.stage-style').hasClass('third-style')){
+					$('.info-style').text('Add');
+				}else{
+					$('.info-style').text('Remove');
+				}
+			});
+			$('#toggle-perspective').on('click',function(){
+				$('.stage-style').toggleClass('perspective-style');
+				if($('.stage-style').hasClass('perspective-style')){
+					$('.info-p').text('300px');
+				}else{
+					$('.info-p').text('0px');
+				}
+			});
+		});
+	</script>
+</body>
+</html>
