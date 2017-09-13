@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="yes" name="apple-mobile-web-app-capable"/>
+	<meta content="yes" name="apple-touch-fullscreen"/>
+	<meta content="black" name="apple-mobile-web-app-status-bar-style">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta charset="utf-8" />
+	<title>Index State</title>
+	<style>
+		*{
+			margin:0;
+			padding: 0;
+		}
+		canvas{ 
+			margin:0 auto;
+		}
+	</style>
+</head>
+<body>
+	<div id="gameContainer" style="width:100%;height:100%;"></div>
+	<script type="text/javascript" src="assets/js/phaser.min.js"></script>
+	<script type="text/javascript">
+		var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '#container');
+		var states = {
+		    preload: function(){
+		        //预加载阶段
+		        this.preload = function(){
+		            console.log('preload : preload');
+		        }
+		        //该场景创建阶段
+		        this.create = function(){
+		            console.log('preload : create');
+		            setTimeout(function(){
+		                game.state.start('create');
+		            },2000);
+		        }
+		    },
+		    create: function(){
+		        //预加载阶段
+		        this.preload = function(){
+		            console.log('create : preload');
+		        }
+		        //该场景创建阶段
+		        this.create = function(){
+		            console.log('create : create');
+		            setTimeout(function(){
+		                game.state.start('play');
+		            },2000);
+		        }
+		    },
+		    play: function(){
+		        //预加载阶段
+		        this.preload = function(){
+		            console.log('play : preload');
+		        }
+		        //该场景创建阶段
+		        this.create = function(){
+		            console.log('play : create');
+		            setTimeout(function(){
+		                game.state.start('over');
+		            },2000);
+		        }
+		    },
+		    over: function(){
+		        //预加载阶段
+		        this.preload = function(){
+		            console.log('over : preload');
+		        }
+		        //该场景创建阶段
+		        this.create = function(){
+		            console.log('over : create');
+		            setTimeout(function(){
+		                console.log('game over'); 
+		            },2000);  
+		        } 
+		    }
+		};
+		game.state.add('preload', states.preload);
+		game.state.add('create', states.create);
+		game.state.add('play', states.play);
+		game.state.add('over', states.over);
+		//开始游戏场景
+		game.state.start('preload');
+	</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="yes" name="apple-mobile-web-app-capable"/>
+	<meta content="yes" name="apple-touch-fullscreen"/>
+	<meta content="black" name="apple-mobile-web-app-status-bar-style">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta charset="utf-8" />
+	<title>Index State</title>
+	<style>
+		*{
+			margin:0;
+			padding: 0;
+		}
+		canvas{ 
+			margin:0 auto;
+		}
+	</style>
+</head>
+<body>
+	<div id="gameContainer" style="width:100%;height:100%;"></div>
+	<script type="text/javascript" src="assets/js/phaser.min.js"></script>
+	<script type="text/javascript">
+		var processDead = false;
+		var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, '#container');
+		var states = {
+			loading: function(){
+				this.preload = function(){
+					game.stage.backgroundColor = '#791265';
+		        	game.load.image('process', 'assets/images/processing.png');
+		        	game.load.image('processBg', 'assets/images/process_bg.png');
+				}
+				this.create = function(){
+					console.log('loading : create');
+	                game.state.start('preload');
+				}
+			},
+		    preload: function(){
+		        //预加载阶段
+		        this.preload = function(){
+		        	game.stage.backgroundColor = '#791265';
+		        	game.load.image('start', 'assets/images/start-bg.jpg');
+		        	game.load.image('startBtn', 'assets/images/start.png');
+		        	game.load.image('playBg', 'assets/images/bg.jpg');
+		        	game.load.image('boom', 'assets/images/boom.png');
+		        	game.load.image('awardBg', 'assets/images/over-bga.jpg');
+		        	game.load.image('noneBg', 'assets/images/over-bgb.jpg');
+		        	game.load.image('awardSign', 'assets/images/over-sign.png');
+		        	game.load.image('noneSign', 'assets/images/over-none.png');
+		        	game.load.image('redpacket', 'assets/images/redpacket.png');
+		        	game.load.image('title', 'assets/images/title-icon.png');
+
+		        	//loading menu
+					game.add.sprite(game.width/2,game.height/2-2,'processBg').anchor.setTo(0.5,0);
+					var preloadSprite = game.add.sprite(game.width/2,game.height/2,'process');
+					preloadSprite.anchor.setTo(0.5,0);
+					preloadSprite.visible = false;
+					var loadText = game.add.text(game.width/2,game.height/2+22,'0%',{font: "bold 16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
+					loadText.anchor.setTo(0.5,0);
+					this.loadText = loadText;
+					game.load.setPreloadSprite(preloadSprite);
+					game.load.onLoadStart.add(function(){},this);
+					game.load.onFileComplete.add(function(progress, cacheKey, success, totalLoaded, totalFiles){
+						loadText.text = progress + '%('+totalLoaded+'/'+totalFiles+')';
+					},this);
+					game.load.onLoadComplete.add(function(){
+						processDead = true;
+					},this);
+
+		            console.log('preload : preload');
+		        }
+		        //该场景创建阶段
+		        this.create = function(){
+		            console.log('preload : create');
+		            var _this = this;
+		            var onLoad = function(){
+		            	if(processDead){
+		            		_this.loadText.destroy();
+		                	game.state.start('create');
+		            	}else{
+		            		setTimeout(function(){
+		            			onLoad();
+		            		},1000);
+		            	}
+		            }
+		            setTimeout(function(){
+		            	onLoad();
+		            },2000);
+		        }
+		    },
+		    create: function(){
+		        //预加载阶段
+		        this.preload = function(){
+		            console.log('create : preload');
+		        }
+		        //该场景创建阶段
+		        this.create = function(){
+		            console.log('create : create');
+		            setTimeout(function(){
+		                game.state.start('play');
+		            },2000);
+		        }
+		    },
+		    play: function(){
+		        //预加载阶段
+		        this.preload = function(){
+		            console.log('play : preload');
+		        }
+		        //该场景创建阶段
+		        this.create = function(){
+		            console.log('play : create');
+		            setTimeout(function(){
+		                game.state.start('over');
+		            },2000);
+		        }
+		    },
+		    over: function(){
+		        //预加载阶段
+		        this.preload = function(){
+		            console.log('over : preload');
+		        }
+		        //该场景创建阶段
+		        this.create = function(){
+		            console.log('over : create');
+		            setTimeout(function(){
+		                console.log('game over'); 
+		            },2000);  
+		        } 
+		    }
+		};
+		game.state.add('loading', states.loading);
+		game.state.add('preload', states.preload);
+		game.state.add('create', states.create);
+		game.state.add('play', states.play);
+		game.state.add('over', states.over);
+		//开始游戏场景
+		game.state.start('loading');
+	</script>
+</body>
+</html>

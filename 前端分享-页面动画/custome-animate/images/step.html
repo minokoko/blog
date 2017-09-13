@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<title>逐帧动画</title>
+	<style type="text/css">
+		.stage{
+			position:absolute;
+			left:50%;
+			top:50%;
+			margin-left: -480px;
+			margin-top: -300px;
+			width: 960px;
+			height: 600px;
+			background-color: #e4e4e4;
+		}
+		.demo{
+			width:560px;
+			height:315px;
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-image: url(1.jpg);
+
+			-webkit-animation:mystep 3s steps(1) infinite alternate;
+			animation:mystep 3s steps(1) infinite alternate;
+		}
+		@keyframes mystep{
+			0%{
+				background-image: url(1.jpg);
+			}
+			6%{
+				background-image: url(2.jpg);
+			}
+			12%{
+				background-image: url(3.jpg);
+			}
+			18%{
+				background-image: url(4.jpg);
+			}
+			24%{
+				background-image: url(5.jpg);
+			}
+			30%{
+				background-image: url(6.jpg);
+			}
+			36%{
+				background-image: url(7.jpg);
+			}
+			42%{
+				background-image: url(8.jpg);
+			}
+			48%{
+				background-image: url(9.jpg);
+			}
+			54%{
+				background-image: url(10.jpg);
+			}
+			60%{
+				background-image: url(11.jpg);
+			}
+			66%{
+				background-image: url(12.jpg);
+			}
+			72%{
+				background-image: url(13.jpg);
+			}
+			78%{
+				background-image: url(14.jpg);
+			}
+			84%{
+				background-image: url(15.jpg);
+			}
+			90%{
+				background-image: url(16.jpg);
+			}
+			96%{
+				background-image: url(17.jpg);
+			}
+			100%{
+				background-image: url(18.jpg);
+			}
+		}
+		@keyframes mystep2{
+			0%{
+				background-image: url(1.jpg);
+			}
+			12%{
+				background-image: url(3.jpg);
+			}
+			24%{
+				background-image: url(5.jpg);
+			}
+			36%{
+				background-image: url(7.jpg);
+			}
+			48%{
+				background-image: url(9.jpg);
+			}
+			60%{
+				background-image: url(11.jpg);
+			}
+			72%{
+				background-image: url(13.jpg);
+			}
+			84%{
+				background-image: url(15.jpg);
+			}
+			100%{
+				background-image: url(18.jpg);
+			}
+		}
+	</style>
+	<script type="text/javascript">
+		(function(){
+			var images = new Array()
+			function preload() {
+				for (i = 0; i < preload.arguments.length; i++) {
+					images[i] = new Image()
+					images[i].src = preload.arguments[i]
+				}
+			}
+			preload(
+				"1.jpg",
+				"2.jpg",
+				"3.jpg",
+				"4.jpg",
+				"5.jpg",
+				"6.jpg",
+				"7.jpg",
+				"8.jpg",
+				"9.jpg",
+				"10.jpg",
+				"11.jpg",
+				"12.jpg",
+				"13.jpg",
+				"14.jpg",
+				"15.jpg",
+				"16.jpg",
+				"17.jpg",
+				"18.jpg"
+			);
+		})();
+	</script>
+</head>
+<body>
+	<div class="stage">
+		<div class="demo">
+		</div>
+	</div>
+	<script type="text/javascript">
+	</script>
+</body>
+</html>

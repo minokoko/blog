@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-ch">
+
+<head>
+    <meta charset="utf-8">
+    <title>background img change</title>
+    <style type="text/css">
+    .content{
+		position:relative;
+		width:100%;
+		height:100%;
+	}
+	.content:after{
+		content:'';
+		display:block;
+		visibility:hidden;
+		clear:both;
+		width: 100%;
+	}
+	.content .content-left{
+		float:left;
+		width:25%;
+		height:600px;
+
+		border:1px solid blue;
+	}
+	.content .content-right{
+		margin-left: 26%;
+		display:block;
+		padding:10px;
+		border:1px solid red;
+	}
+	.btn-group{
+		margin:10px auto;
+		text-align: center;
+	}
+	.btn-group button{
+		display:block;
+		margin:20px auto;
+	}
+
+    .zoomPic {
+        margin: 30px;
+        width: 300px;
+        height: 180px;
+        background-color: blue;
+        background-image: url(images/slide/2.jpg);
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        background-size: 300px 180px;
+        -webkit-transition: all 2.5s ease-in-out;
+        -moz-transition: all 2.5s ease-in-out;
+        -ms-transition: all 2.5s ease-in-out;
+        -o-transition: all 2.5s ease-in-out;
+        transition: all 2.5s ease-in-out;
+    }
+    .back-a{
+			margin-left: 50px;
+		}
+    .zoomPic.zoom {
+        background-size: 1200px 720px !important;
+    }
+    
+    .demo {
+        margin: 20px auto;
+        width: 700px;
+        height: 400px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-image: url('images/slide/1.jpg');
+        -webkit-animation: changeBg 5s linear both infinite;
+        -moz-animation: changeBg 5s linear both infinite;
+        -ms-animation: changeBg 5s linear both infinite;
+        -o-animation: changeBg 5s linear both infinite;
+        animation: changeBg 5s linear both infinite;
+    }
+    
+     @-webkit-keyframes changeBg {
+        33% {
+            background-image: url('images/slide/2.jpg');
+        }
+        66% {
+            background-image: url('images/slide/3.jpg');
+        }
+        100% {
+            background-image: url('images/slide/1.jpg');
+        }
+    }
+    @keyframes changeBg {
+        33% {
+            background-image: url('images/slide/2.jpg');
+        }
+        66% {
+            background-image: url('images/slide/3.jpg');
+        }
+        100% {
+            background-image: url('images/slide/1.jpg');
+        }
+    }
+   
+    </style>
+</head>
+
+<body>
+	<div class="content">
+		<div class="content-left">
+			<a href="javascript:;" onclick="history.go(-1);" class="back-a">Back</a>
+    		<div class="btn-group">
+    			<button id="change" class="btn btn-default btn-l">Change Animation</button>
+    		</div>
+    		<div class="line color-red"></div>
+    		<div class="btn-group">
+    			<button class='btn btn-default btn-l zoom'>Zoom</button>
+    			<button class='btn btn-default btn-l pause'>Pause</button>
+    			<button class='btn btn-default btn-l zoomout'>Zoom Out</button>
+    		</div>
+    		<div class="line color-red"></div>
+    		<div class="btn-group">
+    			<button class='btn btn-default btn-l zoom'>Zoom</button>
+    			<button class='btn btn-default btn-l pause'>Pause</button>
+    			<button class='btn btn-default btn-l zoomout'>Zoom Out</button>
+    		</div>
+    	</div>
+    	<div class="content-right">
+    		<div class="demo" id="demo">
+   			</div>
+   			<div class="line color-red"></div>
+   			<div class="">
+   				<h3>Pure Javascript</h3>
+    			<div class="zoomPic"></div>
+    			<h3>jQuery</h3>
+    			<div class='zoomPic'></div>
+   			</div>
+    	</div>
+	</div>
+
+    <script type="text/javascript" src="../lib/jquery.min.js"></script>
+    <script type="text/javascript">
+    	(function(){
+    		var AnimateUtil = {
+    			/**
+    			 * 通过document样式表得到keyframes
+    			 * @param  {string} animationName keyframes 名称
+    			 * @return {array}               返回设定的keyframes数组
+    			 */
+    			findKeyFramesRule:function(animationName){
+    				var ss = document.styleSheets;
+					for(var i = 0;i < ss.length;++i){
+						for(var j = 0;ss[i].cssRules&&j<ss[i].cssRules.length;++j){
+							if(ss[i].cssRules[j].type == window.CSSRule.KEYFRAMES_RULE && ss[i].cssRules[j].name == animationName){
+								return ss[i].cssRules[j];
+							}
+						}
+					}
+					return null;
+    			},
+    			/**
+    			 * 获得关键帧动画的关键帧
+    			 * @param  {array} keyframe 关键帧数组
+    			 * @return {array}          
+    			 */
+    			getAllFPS:function(keyframe){
+    				var keyFps = [];
+    				for(var i =0;i<keyframe.length;i++){
+    					keyFps.push(keyframe[i].keyText);
+    				}
+    				return keyFps;
+    			}
+    		};
+    		window.AnimateUtil||(window.AnimateUtil = AnimateUtil);
+    	})();
+
+    	var $change = document.getElementById('change');
+
+    	$change.onclick = function(){
+    		var anim = AnimateUtil.findKeyFramesRule('changeBg');
+    		console.log(anim);
+    		anim.deleteRule('33%');
+    		console.log(anim);
+    		// anim.name = 'changBg1'
+    		document.getElementById('demo').style.animation = anim;
+    	};
+
+	    var $demo = document.getElementById('demo');
+
+	    $demo.addEventListener('webkitAnimationStart', function() {
+	        alert('animation start');
+	    }, false);
+
+	    $demo.addEventListener('webkitAnimationEnd', function() {
+	        alert('animation End');
+	    }, false);
+
+	    var zoomOne = document.getElementsByClassName('zoomPic')[0],
+	        zoomOneBGSize = window.getComputedStyle(zoomOne).getPropertyValue('background-size'),
+	        $zoomTwo = $('.zoomPic:eq(1)'),
+	        zoomTwoBGSize = $zoomTwo.css('background-size');
+
+	    document.getElementsByClassName('zoom')[0].onclick = function() {
+	        if (!zoomOne.classList.contains('zoom')) {
+	            zoomOne.classList.add('zoom');
+	        }
+	    }
+	    document.getElementsByClassName('pause')[0].onclick = function() {
+	        var computedStyle = window.getComputedStyle(zoomOne),
+	            backgroundSize = computedStyle.getPropertyValue('background-size');
+	        zoomOne.style.backgroundSize = backgroundSize;
+	        zoomOne.classList.remove('zoom');
+	    }
+	    document.getElementsByClassName('zoomout')[0].onclick = function() {
+	        zoomOne.classList.remove('zoom');
+	        zoomOne.style.backgroundSize = zoomOneBGSize;
+	    }
+
+	    $('.zoom:eq(1)').on('click', function() {
+	        if (!$zoomTwo.hasClass('zoom')) {
+	            $zoomTwo.addClass('zoom');
+	        }
+	    });
+	    $('.pause:eq(1)').on('click', function() {
+	        var backgroundSize = $zoomTwo.css("background-size");
+	        $zoomTwo.css({
+	            'background-size': backgroundSize
+	        });
+	        $zoomTwo.removeClass('zoom');
+	    });
+	    $('.zoomout:eq(1)').on('click', function() {
+	        $zoomTwo.removeClass('zoom');
+	        $zoomTwo.css('background-size', zoomTwoBGSize);
+	    });
+    </script>
+</body>
+
+</html>

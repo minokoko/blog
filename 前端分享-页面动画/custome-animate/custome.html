@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8"/>
+	<title>动画实现</title>
+	<!-- <link rel="stylesheet" type="text/css" href="../layouts/css/common.css"> -->
+	<style type="text/css">
+		.content{
+			position:relative;
+			width:100%;
+			height:100%;
+		}
+		.content:after{
+			content:'';
+			display:block;
+			visibility:hidden;
+			clear:both;
+			width: 100%;
+		}
+		.content .content-left{
+			float:left;
+			width:25%;
+			height:600px;
+
+			border:1px solid blue;
+		}
+		.content .content-right{
+			margin-left: 26%;
+			display:block;
+			padding:10px;
+			border:1px solid red;
+		}
+		.btn-group{
+			margin:10px auto;
+			text-align: center;
+		}
+		.btn-group button{
+			display:block;
+			margin:20px auto;
+		}
+		.js-animate,.jquery-animate{
+			position:relative;
+			height:150px;
+		}
+		.animate-box{
+			display:block;
+			position:absolute;
+			width:50px;
+			height:50px;
+		}
+		#animate-box{
+			top:60px;
+			background-color: #f00;
+		}
+		#animate-box1{
+			top:60px;
+			background-color: #f0f;
+		}
+		#animate-boxj{
+			top:60px;
+			background-color: #00f;
+		}
+		#animate-boxr{
+			top:60px;
+			background-color: #0f0;
+		}
+		.back-a{
+			margin-left: 50px;
+		}
+	</style>
+</head>
+<body>
+	<div class="content">
+		<div class="content-left">
+			<a href="javascript:;" onclick="history.go(-1);" class="back-a">Back</a>
+    		<div class="btn-group">
+    			<button id="open" class="btn btn-default btn-l">动画--js--保帧</button>
+    			<button id="open1" class="btn btn-default btn-l">动画--js--保时</button>
+    			<button id="openJ" class="btn btn-default btn-l">动画--jQuery</button>
+    			<button id="openA" class="btn btn-default btn-l">动画--ALL</button>
+    		</div>
+    		<div class="line color-red"></div>
+    		<div class="btn-group">
+    			<button id="requestA" class="btn btn-default btn-l">requestAnimationFrame</button>
+    			<button id="openA1" class="btn btn-default btn-l">ALL</button>
+    		</div>
+    	</div>
+    	<div class="content-right">
+    		<div class="js-animate">
+				<p>javascript动画--保帧：<span id="info"></span></p>
+				<div class="animate-box" id="animate-box"></div>
+			</div>
+			<div class="js-animate">
+				<p>javascript动画--保时：<span id="info1"></span></p>
+				<div class="animate-box" id="animate-box1"></div>
+			</div>
+			<div class="jquery-animate">
+				<p>jquery动画：<span id="infoj"></span></p>
+			    <div class="animate-box" id="animate-boxj"></div>
+			</div>
+			<div class="js-animate">
+				<p>requestAnimationFrame：<span id="infor"></span></p>
+				<div class="animate-box" id="animate-boxr"></div>
+			</div>
+    	</div>
+	</div>
+	<script src="../lib/jquery.min.js"></script>
+	<script type="text/javascript">
+	    //requestAnimationFrame 兼容性方案
+		(function(){
+		    var lastTime = 0;
+		    var vendors = ['webkit', 'moz'];
+		    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+		        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+		        window.cancelAnimationFrame =
+		          window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+		    }
+
+		    if (!window.requestAnimationFrame)
+		        window.requestAnimationFrame = function(callback, element) {
+		            var currTime = new Date().getTime();
+		            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+		            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+		              timeToCall);
+		            lastTime = currTime + timeToCall;
+		            return id;
+		        };
+
+		    if (!window.cancelAnimationFrame)
+		        window.cancelAnimationFrame = function(id) {
+		            clearTimeout(id);
+		        };
+		}());
+
+	    var open = document.getElementById('openA');
+	    open.onclick=function(e){
+	    	aini_FPS(document.getElementById('animate-box'),{
+	    		X:300,
+	    		Y:0,
+	    		duration:1000
+	    	});
+	    	aini_Time(document.getElementById('animate-box1'),{
+	    		X:300,
+	    		Y:0,
+	    		duration:1000
+	    	});
+	    };
+	    var tween = {
+		    /*
+		      t=0~d , b=初始值 ,c = 位移长度 ， d = 末位置-初位置 
+		    */
+		    Linear_FPS: function(t,b,c,d){ return c*t/d + b; },
+		    Linear_Time: function(l,dt,p,dX){
+		     return l+(dt/p)*dX;
+
+		 	}
+
+		};
+		//基于帧数的动画--保证播放的帧数，放弃播放时长和精度
+		//依据浏览器的动画帧数得到所需要运动的次数
+		function aini_FPS(el,opt)
+		{
+			var FPS = 1000/13;
+			el.style.position="absolute";
+			el.style.left = '0px';
+		    var duration = opt.duration||1000;//动画周期
+		    var t = 0,
+		    	step=Math.floor((duration/1000)*FPS);//以当前帧数，完成移动所需要的步数
+
+		    var X = pageX(el),
+		    	Y=pageY(el);//获取当前元素页面位置
+
+		    var dx = opt.X-X,
+		    	dy = opt.Y-Y;//计算出最终位置
+
+		    var startTime = new Date().getTime();
+		    var endTime = new Date().getTime();
+
+		    function _aini()
+		    {
+		 		if(t<step)
+		        {
+		        	el.style.left=tween.Linear_FPS(t,X,dx,step)+"px";//先只在X方向运动
+		        	t++;
+		        	setTimeout(arguments.callee,1000/FPS);
+		      	}
+		        else
+		        {
+		        	el.style.left=opt.X+"px";
+		        	endTime = new Date().getTime();
+
+		        	document.getElementById('info').innerHTML = 'duration: '+(endTime-startTime)+', step : '+t;
+		      	}
+			};
+		    _aini();
+		}
+
+		//基于时间的动画--保证动画时长，牺牲掉精度
+		//由时间进度计算出当前动画进度
+		function aini_Time(el,opt){
+			var startTime = new Date().getTime(),
+				endTime = new Date().getTime(),
+				step = 0;
+
+			var duration = opt.duration||1000;
+
+			el.style.position="absolute";
+			el.style.left = '0px';
+
+			var X = pageX(el),
+				Y=pageY(el);
+			var dx = opt.X-X,
+				dy = opt.Y-Y;
+
+			function _aini(){
+				var curTime = new Date().getTime();
+
+				var dt = (curTime-startTime);//时间差
+
+				var styleLeft = el.style.left,
+				    left = styleLeft.substring(0,styleLeft.indexOf('px'))*1;
+
+				if(dt<=duration){
+					left = tween.Linear_Time(X,dt,duration,dx);
+					el.style.left = left+'px';
+
+					setTimeout(arguments.callee, 13);
+					step++;
+				}else{
+					el.style.left = opt.X+"px";
+					endTime = new Date().getTime();
+
+		        	document.getElementById('info1').innerHTML = 'duration: '+(endTime-startTime)+', step : '+step;
+				}
+			}
+			_aini();
+		}
+		function pageX(el,e){
+			return 0;
+		}
+		function pageY(el,e){
+			return 0;
+		}
+		function requestAnimate(duration){
+			var start = null,
+				step = 0,
+				duration = duration||3000;
+			var ele = document.getElementById('animate-boxr');
+
+			var _aini = function(timestamp){
+				step++;
+				if(!start)start = timestamp;
+				var progress = timestamp - start;
+				ele.style.left = (progress/duration)*300+'px';
+				if(progress <= duration){
+					window.requestAnimationFrame(_aini);
+				}else{
+					document.getElementById('infor').innerHTML = 'duration: '+(timestamp-start)+', step : '+step;
+				}
+			};
+			window.requestAnimationFrame(_aini);
+		}
+	</script>
+	<script type="text/javascript">
+		$(function(){
+			$('#open').click(function(){
+				aini_FPS(document.getElementById('animate-box'),{
+		    		X:300,
+		    		Y:0,
+		    		duration:3000
+		    	});
+			});
+			$('#open1').click(function(){
+		    	aini_Time(document.getElementById('animate-box1'),{
+		    		X:300,
+		    		Y:0,
+		    		duration:3000
+		    	});
+			});
+			$('#openJ').click(function(){
+				var startTime = new Date().getTime();
+				$('#animate-boxj').css({
+					left:0
+				}).animate({
+					left:300
+				},3000,'linear',function(){
+					var endTime = new Date().getTime();
+					$('#infoj').text('duration: '+(endTime-startTime));
+				});
+			});
+			$('#openA').click(function(){
+		    	$('#open').click();
+		    	$('#open1').click();
+		    	$('#openJ').click();
+			});
+			$('#requestA').click(function(){
+				requestAnimate(3000);
+			});
+			$('#openA1').click(function(){
+		    	$('#open').click();
+		    	$('#open1').click();
+		    	$('#openJ').click();
+		    	$('#requestA').click();
+			});
+		});
+	</script>
+</body>
+</html>
