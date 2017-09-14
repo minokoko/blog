@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="yes" name="apple-mobile-web-app-capable"/>
+	<meta content="yes" name="apple-touch-fullscreen"/>
+	<meta content="black" name="apple-mobile-web-app-status-bar-style">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta charset="utf-8" />
+	<title>Index State</title>
+	<style>
+		*{
+			margin:0;
+			padding: 0;
+		}
+		canvas{ 
+			margin:0 auto;
+		}
+	</style>
+</head>
+<body>
+	<div id="gameContainer" style="width:100%;height:100%;"></div>
+	<script type="text/javascript" src="assets/js/phaser.min.js"></script>
+	<script type="text/javascript">
+		var processDead = false;
+		var totalTime = 30; 
+		var loadTimeDelay = 2000;
+		var count = 3;
+		var score = 0;
+		var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'gameContainer');
+		var states = {
+			loading: function(){
+				this.init = function(){
+					if(!game.device.desktop){
+						game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+						game.scale.forcePortrait = true;				
+					}else{
+						game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+					}
+					//游戏居中
+					game.scale.pageAlignHorizontally = true;
+					game.scale.pageAlignVertically = true;
+					game.scale.refresh();
+				}
+				this.preload = function(){
+					game.stage.backgroundColor = '#791265';
+		        	game.load.image('process', 'assets/images/processing.png');
+		        	game.load.image('processBg', 'assets/images/process_bg.png');
+				}
+				this.create = function(){
+					console.log('loading : create');
+	                game.state.start('preload');
+				}
+			},
+		    preload: function(){
+		        //预加载阶段
+		        this.preload = function(){
+		        	game.stage.backgroundColor = '#791265';
+		        	game.load.image('start', 'assets/images/start-bg.jpg');
+		        	game.load.image('startBtn', 'assets/images/start.png');
+		        	game.load.image('playBg', 'assets/images/bg.jpg');
+		        	game.load.image('boom', 'assets/images/boom.png');
+		        	game.load.image('awardBg', 'assets/images/over-bga.jpg');
+		        	game.load.image('noneBg', 'assets/images/over-bgb.jpg');
+		        	game.load.image('awardSign', 'assets/images/over-sign.png');
+		        	game.load.image('noneSign', 'assets/images/over-none.png');
+		        	game.load.image('redpacket', 'assets/images/redpacket.png');
+		        	game.load.image('title', 'assets/images/title-icon.png');
+
+		        	//loading menu
+					game.add.sprite(game.width/2,game.height/2-2,'processBg').anchor.setTo(0.5,0);
+					var preloadSprite = game.add.sprite(game.width/2,game.height/2,'process');
+					preloadSprite.anchor.setTo(0.5,0);
+					preloadSprite.visible = false;
+					var loadText = game.add.text(game.width/2,game.height/2+22,'0%',{font: "bold 16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
+					loadText.anchor.setTo(0.5,0);
+					this.loadText = loadText;
+					game.load.setPreloadSprite(preloadSprite);
+					game.load.onLoadStart.add(function(){},this);
+					game.load.onFileComplete.add(function(progress, cacheKey, success, totalLoaded, totalFiles){
+						loadText.text = progress + '%('+totalLoaded+'/'+totalFiles+')';
+					},this);
+					game.load.onLoadComplete.add(function(){
+						processDead = true;
+					},this);
+
+		            console.log('preload : preload');
+		        }
+		        //该场景创建阶段
+		        this.create = function(){
+		            console.log('preload : create');
+		            var _this = this;
+		            var onLoad = function(){
+		            	if(processDead){
+		            		_this.loadText.destroy();
+		                	game.state.start('create');
+		            	}else{
+		            		setTimeout(function(){
+		            			onLoad();
+		            		},1000);
+		            	}
+		            }
+		            setTimeout(function(){
+		            	onLoad();
+		            },loadTimeDelay);
+		        }
+		    },
+		    create: function(){
+		        //该场景创建阶段
+		        this.create = function(){
+		        	var start = game.add.sprite(game.world.width/2, 0, 'start');
+		        	start.anchor.setTo(0.5,0);
+		        	start.width = game.world.width;
+		        	start.height = game.world.height;
+
+		        	var startBtn = game.add.image(game.world.width/2, game.world.height-80, 'startBtn');
+		        	startBtn.scale.setTo(0.5);
+		        	startBtn.anchor.setTo(0.5);
+
+		        	startBtn.inputEnabled = true;
+		        	startBtn.events.onInputUp.add(function(){
+		        		game.state.start('play');
+		        	},this);
+		        }
+		    },
+		    play: function(){
+		        //该场景创建阶段
+		        this.create = function(){
+		        	var titleGroup = game.add.group();
+		            var titleIcon = game.add.sprite(10, 10, 'title',titleGroup);
+		            titleIcon.scale.setTo(0.5);
+		            var title = game.add.text(20+titleIcon.width, 10+titleIcon.height/2, 'X',{fill:'#fff',fontSize:'16px',fontWeight: 400},titleGroup);
+		        	title.anchor.setTo(0, 0.5);
+		        	var scoreText = game.add.text(40+titleIcon.width, 10+titleIcon.height/2, score,{fill:'#fff',fontSize:'16px',fontWeight: 400},titleGroup);
+		        	scoreText.anchor.setTo(0, 0.5);
+		        	this.scoreText = scoreText;
+
+		        	var timeSecond = game.add.text(game.world.width-40, 10+titleIcon.height/2, totalTime+'s',{fill:'#fff',fontSize:'16px',fontWeight: 400},titleGroup);
+		        	timeSecond.anchor.setTo(0, 0.5);
+		        	this.timeSecond = timeSecond;
+
+		        	this.timeLoop = game.time.events.loop(1000, this.updateTime, this);
+
+		        	var pockets = game.add.group();
+					pockets.enableBody = true;
+					pockets.setAll('outOfBoundsKill', true);
+					pockets.setAll('checkWorldBounds',true);
+
+					game.physics.startSystem(Phaser.Physics.Arcade);
+		        	this.createTimer = game.time.events.loop(500, function(){
+						this.createPocket(pockets);
+					},this);
+					
+		        	game.world.swap(titleGroup, pockets);
+
+		        	//红包点击爆炸效果
+					var score_explosions = game.add.group();
+					this.score_explosions = score_explosions;
+					score_explosions.createMultiple(30, 'boom');
+
+					score_explosions.forEach(this.setupInvader, this);
+		        }
+		        this.updateTime = function(){
+		        	if(totalTime*1000>=1000){
+		        		totalTime  = totalTime - 1;
+		        	}else{
+		        		totalTime = 0;
+		        		game.time.events.remove(this.timeLoop);
+		        		game.state.start('over');
+		        	}
+		        	this.timeSecond.text = totalTime + 's';
+		        }
+		        this.createPocket = function(pockets){
+					var img = game.cache.getImage('redpacket');
+	        		var w = game.world.width / 5;
+	        		var h = w / img.width * img.height;
+
+		        	for(var i=0;i<count;i++){
+		        		var x = game.rnd.integerInRange(0, 4*w);
+		        		var y = -(h*(i+1));
+						var pocket = pockets.create(game.rnd.integerInRange(0, 4*w), y, 'redpacket');
+						pocket.width = w;
+	            		pocket.height = h;
+						game.physics.enable(pocket);
+						pocket.body.gravity.y = game.rnd.integerInRange(100, 250);
+						pocket.inputEnabled = true;
+
+						pocket.events.onInputUp.add(this.addScore,this);
+		        	}
+		        }
+		        this.setupInvader = function(invader){
+					invader.anchor.x = 0.5;
+					invader.anchor.y = 0.5;
+					var b = game.cache.getImage('boom');
+					invader.width = game.world.width/5;
+					invader.height = b.height * invader.width/b.width;
+					invader.animations.add('kaboom');
+				}
+		        this.addScore = function(pocket){
+		        	this.scoreKabom(pocket);
+		        	score += 1;
+		        	pocket.destroy();
+		        	this.setScoreAni();
+		        	this.scoreText.text = score;
+		        }
+		        this.scoreKabom = function(alien){
+					var explosions = this.score_explosions;
+					var explosion = explosions.getFirstExists(false);
+					explosion.reset(alien.body.x+alien.width/2, alien.body.y+alien.height/2);
+					explosion.play('kaboom', 4, false, true);
+				}
+				this.setScoreAni = function(){
+					var ani = game.add.text(game.world.width/2, game.world.height/2,'+1',{font: "26px Arial", fill: "#ffe63c", boundsAlignH: "center", boundsAlignV: "middle",fontWeight:400});
+					ani.anchor.setTo(0.5 , 1);
+
+					ani.alpha = 0;
+					var showTween = game.add.tween(ani).to({
+						alpha: 1,
+						fontSize: '120px'
+					}, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
+
+					showTween.onComplete.add(function() {
+				        var hideTween = game.add.tween(ani).to({
+				            alpha: 0,
+				            fontSize: '26px'
+				        }, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
+				        hideTween.onComplete.add(function() {
+				            ani.destroy();
+				        });
+				    });
+				}
+		    },
+		    over: function(){
+		        //该场景创建阶段
+		        this.create = function(){
+		            var bg = game.add.image(game.world.width/2,0,score>0?'awardBg':'noneBg');
+					bg.anchor.setTo(0.5,0);
+					bg.width = game.world.width;
+					bg.height = game.world.height;
+
+					if(score>0){
+						this.setAward();
+					}else{
+						this.setNone();
+					}
+
+		            setTimeout(function(){
+		                console.log('game over'); 
+		            },2000);  
+		        } 
+		        this.setAward = function(){
+		        	var over = game.add.image(game.world.width/2, game.world.height/2-100, 'awardSign');
+		        	over.scale.setTo(0.5);
+					over.anchor.setTo(0.5);
+
+					var text = game.add.text(game.world.width/2, game.world.height/2+110, '恭喜你', {font: "100px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle",fontWeight:400});
+					text.anchor.setTo(0.5);
+
+					var text2 = game.add.text(game.world.width/2, game.world.height/2+210, '一共抢到'+ score +'个红包',{font: "30px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle",fontWeight:400});
+					text2.addColor('#fee433',4);
+					text2.addColor('#fff', 4 + (score+"").length);
+					text2.anchor.setTo(0.5);
+		        };
+		        this.setNone = function(){
+		        	var over = game.add.image(game.world.width/2, game.world.height/2-100, 'noneSign');
+		        	over.scale.setTo(0.5);
+					over.anchor.setTo(0.5);
+					
+					var text = game.add.text(game.world.width/2, game.world.height/2+110, '很遗憾', {font: "100px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle",fontWeight:400});
+					text.anchor.setTo(0.5);
+					var text2 = game.add.text(game.world.width/2, game.world.height/2+210, '没有抢到哦,下次继续努力',{font: "30px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle",fontWeight:400});
+					text2.anchor.setTo(0.5);
+		        }
+		    }
+		};
+		game.state.add('loading', states.loading);
+		game.state.add('preload', states.preload);
+		game.state.add('create', states.create);
+		game.state.add('play', states.play);
+		game.state.add('over', states.over);
+		//开始游戏场景
+		game.state.start('loading');
+	</script>
+</body>
+</html>

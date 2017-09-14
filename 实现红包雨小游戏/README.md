@@ -150,7 +150,7 @@ game.state.add('over', states.over);
 //开始游戏场景
 game.state.start('preload');
 ```
-具体请查看：index-state.html  
+具体请查看：[index-state.html](https://github.com/careycui/blog/blob/master/%E5%AE%9E%E7%8E%B0%E7%BA%A2%E5%8C%85%E9%9B%A8%E5%B0%8F%E6%B8%B8%E6%88%8F/game-demo/index-state.html)  
 现在已经搭好了游戏的骨架，游戏场景已经可进行切换。接下来就要加载游戏资源，编写游戏核心逻辑来丰富游戏场景。  
 ##### Loader-加载游戏资源  
 Phaser提供了Loader对象用于加载各种游戏资源。每种资源都有自己的引用名字，loader通过添加引用名采用XHR方式完成资源的加载，并提供了加载进度和加载完成回调方法。  
@@ -394,19 +394,6 @@ var processDead = false;
             },2000);
         }
     },
-    create: function(){
-        //预加载阶段
-        this.preload = function(){
-            console.log('create : preload');
-        }
-        //该场景创建阶段
-        this.create = function(){
-            console.log('create : create');
-            setTimeout(function(){
-                game.state.start('play');
-            },2000);
-        }
-    },
 ......
 game.state.add('loading', states.loading);
 game.state.add('preload', states.preload);
@@ -416,10 +403,245 @@ game.state.add('over', states.over);
 //开始游戏场景
 game.state.start('loading');
 ```
-具体请查看：index-load.html  
+具体请查看：[index-load.html](https://github.com/careycui/blog/blob/master/%E5%AE%9E%E7%8E%B0%E7%BA%A2%E5%8C%85%E9%9B%A8%E5%B0%8F%E6%B8%B8%E6%88%8F/game-demo/index-load.html)  
 那么，接下来需要将资源渲染到游戏画布上，并让它动起来
 
 ##### Play-添加游戏内容  
-物理效果、元素动画、游戏逻辑
+上一步解决了加载资源的问题，这一步我们将要完成：资源的渲染、让游戏动起来。  
+###### 1. 渲染资源
+    image、sprite、graphics、btn、text、audio、video等这些都是我们常用的资源，
+    Phaser为这些资源提供了渲染到画布的方法。
+> add :Phaser.GameObjectFactory
+> The GameObjectFactory is a quick way to create many common game objects using game.add.
+Created objects are automatically added to the appropriate Manager, World, or manually specified parent Group.
+
+GameObjectFactory见文知意，是一个工厂方法。它可以直接通过**game.add.xxx**这种简便的方式渲染指定的资源。以添加一个图片为例：  
+```javascript
+//x 相对于父容器的x坐标
+//y 相对于父容器的y坐标
+//key load资源是设定的唯一标示
+//frame 引入资源为texture或雪碧图时，需要指定此参数
+//group 添加到的组
+game.add.image(x, y, key, frame, group);
+```
+其它资源添加大同小异，需要用到某种资源时查询官方文档即可，这里不再进行其它介绍。  
+
+这里值得介绍的另外一个概念是**group(组)**。group是Spirtes、images等展示资源的合集。它方便多个资源的整体操控以及资源的重复利用，并且可以利用多个组设置层级。相关组的操作可查看官方示例<http://phaser.io/examples/v2/category/groups>。 
+```javascript
+//关于组的部分操作
+//添加一个组
+var group = game.add.group();
+//组开启物理引擎
+group.enableBody = true;
+
+//创建一个组内元素
+var asset = group.create(x,y,key);
+//批量创建多个元素
+var asserts = group.createMultiple(quantity, key);
+
+//添加已创建元素
+var assetExist = group.add(child);
+......
+```
+了解，这些知识后就可以丰富游戏界面了。如下： 
+```javascript
+var processDead = false;
+var totalTime = 30; 
+var loadTimeDelay = 2000;
+var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'gameContainer');
+var states = {
+    loading: function(){
+        this.init = function(){
+            if(!game.device.desktop){
+                game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+                game.scale.forcePortrait = true;                
+            }else{
+                game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+            }
+            //游戏居中
+            game.scale.pageAlignHorizontally = true;
+            game.scale.pageAlignVertically = true;
+            game.scale.refresh();
+        }
+
+        ......
+
+    },
+    
+    ......
+
+    create: function(){
+        //该场景创建阶段
+        this.create = function(){
+            var start = game.add.sprite(game.world.width/2, 0, 'start');
+            start.anchor.setTo(0.5,0);
+            start.width = game.world.width;
+            start.height = game.world.height;
+
+            var startBtn = game.add.image(game.world.width/2, game.world.height-80, 'startBtn');
+            startBtn.scale.setTo(0.5);
+            startBtn.anchor.setTo(0.5);
+
+            startBtn.inputEnabled = true;
+            startBtn.events.onInputUp.add(function(){
+                game.state.start('play');
+            },this);
+        }
+    },
+    play: function(){
+        //该场景创建阶段
+        this.create = function(){
+            var titleIcon = game.add.sprite(10, 10, 'title');
+            titleIcon.scale.setTo(0.5);
+            var title = game.add.text(20+titleIcon.width, 10+titleIcon.height/2, 'X',{fill:'#fff',fontSize:'16px',fontWeight: 400});
+            title.anchor.setTo(0, 0.5);
+            var score = game.add.text(40+titleIcon.width, 10+titleIcon.height/2, '0',{fill:'#fff',fontSize:'16px',fontWeight: 400});
+            score.anchor.setTo(0, 0.5);
+
+            var timeSecond = game.add.text(game.world.width-40, 10+titleIcon.height/2, totalTime+'s',{fill:'#fff',fontSize:'16px',fontWeight: 400});
+            timeSecond.anchor.setTo(0, 0.5);
+            this.timeSecond = timeSecond;
+
+            this.timeLoop = game.time.events.loop(1000, this.updateTime, this);
+        }
+        this.updateTime = function(){
+            if(totalTime*1000>=1000){
+                totalTime  = totalTime - 1;
+            }else{
+                totalTime = 0;
+                game.time.events.remove(this.timeLoop);
+            }
+            this.timeSecond.text = totalTime + 's';
+        }
+    },
+    ......
+};
+......
+```
+有几处需要注意的地方：
+1. 设置游戏的缩放模式  
+```javascript
+game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
+```
+> A scale mode that causes the Game size to change  
+Use scaleModel NO_SCALE
+>> 不使用任何缩放模式
+
+> Fixed game size; scale canvas proportionally to fill its container
+Use scaleMode SHOW_ALL.
+>> 通过调整你的游戏大小，以适应父元素的大小，但会保持游戏的宽高比例。
+
+> Fixed game size; stretch canvas to fill its container (uncommon)
+Use scaleMode EXACT_FIT.
+>> 将游戏的大小重设成适合父容器的大小，而且并不会保持游戏的宽高比例。
+
+> Fixed game size; scale canvas proportionally by some other criteria
+Use scaleMode USER_SCALE. Examine parentBounds in the resize callback and call setUserScale if necessary.
+>> 自定义缩放模式
+
+> Fluid game/canvas size
+Use scaleMode RESIZE. Examine the game or canvas size from the onSizeChange signal or the Phaser.State#resize callback and reposition game objects if necessary.
+>> RESIZE模式是创建一个和其父元素同样大小的Canvas元素，并且随父元素大小变化去适应窗口
+
+2. 绑定操作事件
+Phaser 提供了events对象，包含了所需要的所有操作事件。但，有一点需要注意：**渲染的元素需要设定inputEnabled=true**绑定事件才有效。如下：
+```javascript
+startBtn.inputEnabled = true;
+startBtn.events.onInputUp.add(function(){
+    game.state.start('play');
+},this);
+```
+3. 时间对象
+Phaser提供了操作时间的对象。此对象可以在失去焦点时，时间停止不再变化。如何：
+```javascript
+//add 
+this.timeLoop = game.time.events.loop(1000, this.updateTime, this);
+//remove
+game.time.events.remove(this.timeLoop);
+```
+具体请查看：[index-paint.html](https://github.com/careycui/blog/blob/master/%E5%AE%9E%E7%8E%B0%E7%BA%A2%E5%8C%85%E9%9B%A8%E5%B0%8F%E6%B8%B8%E6%88%8F/game-demo/index-paint.html)  
+
+###### 2. 让游戏动起来  
+现在需要实现游戏逻辑，以及添加物理引擎效果。游戏逻辑不在多做介绍，因具体游戏而变。  
+现在我们需要完成的是：红包降落的效果。为此将要用到物理引擎效果、动画效果。
+使用物理引擎可以让我们轻松的实现例如碰撞、加速运动、摩擦力、重力降落等效果。而Phaser提供了三个物理引擎供我们使用。
+* Arcade
+最简单快速的物理引擎，因为只支持AABB式的碰撞，计算速度最快，实现简单的物理碰撞、接触、重力等效果最佳。
+* P2
+大而全的物理引擎，支持多种物理模型。
+Ninja
+Ninja，则是比较专注精确的多种模式的碰撞检测。
+
+对以上物理引擎感兴趣的，可自行查找。  
+
+对于简单降落效果，选用Arcade就足够了。关键代码：  
+```javascript
+// 开启物理引擎
+game.physics.startSystem(Phaser.Physics.Arcade);
+
+//第一种方式 设置降落速度
+game.physics.arcade.gravity.y = 300;
+//第二种方式 单个设定降落速度
+pocket.body.gravity.y = 300；
+```
+设置元素加入物理效果
+```javascript
+game.physics.enable(pocket);
+```
+具体请查看：[index-play.html](https://github.com/careycui/blog/blob/master/%E5%AE%9E%E7%8E%B0%E7%BA%A2%E5%8C%85%E9%9B%A8%E5%B0%8F%E6%B8%B8%E6%88%8F/game-demo/index-play.html)
+
+完成后还存在三个问题：  
+点击红包后直接消失很突兀，需要添加动画效果;  
+降落红包雨title栏的层级需要调整;  
+缺少点中提示。  
+现在，我们需要解决这三个问题。  
+**点中提示效果，关键代码：**
+```javascript
+//创建过渡动画效果，并设定最终的效果
+var showTween = game.add.tween(ani).to(properties, duration, ease, autoStart, delay, repeat, yoyo);
+//动画效果结束回调方法
+showTween.onComplete.add(listener,context);
+```
+**红包消失效果关键代码：**
+```javascript
+//红包点击爆炸效果
+var score_explosions = game.add.group();
+this.score_explosions = score_explosions;
+score_explosions.createMultiple(30, 'boom');
+score_explosions.forEach(this.setupInvader, this);
+
+//调用效果
+this.scoreKabom = function(alien){
+    var explosions = this.score_explosions;
+    var explosion = explosions.getFirstExists(false);
+    explosion.reset(alien.body.x+alien.width/2, alien.body.y+alien.height/2);
+    explosion.play('kaboom', 4, false, true);
+}
+```
+**z-index，通过group解决，关键代码：**
+```javascript
+game.world.swap(titleGroup, pockets);
+```
+具体请查看: [index.html](https://github.com/careycui/blog/blob/master/%E5%AE%9E%E7%8E%B0%E7%BA%A2%E5%8C%85%E9%9B%A8%E5%B0%8F%E6%B8%B8%E6%88%8F/game-demo/index.html)  
+
+###### 3. 完善游戏结束场景，完成整个游戏
+最终代码请查看: [index-all.html](https://github.com/careycui/blog/blob/master/%E5%AE%9E%E7%8E%B0%E7%BA%A2%E5%8C%85%E9%9B%A8%E5%B0%8F%E6%B8%B8%E6%88%8F/game-demo/index-all.html)
 
 ##### Utils-常用工具
+ArraySet
+arrayset是一组数据结构（项目必须设置内是唯一的），同时维持秩序。
+
+ArrayUtils
+阵列的具体方法，如getrandomitem，洗牌，transposematrix，旋转和numberarray。
+
+Color
+相位。颜色是一组静态方法，协助色彩处理和转换。
+
+Debug
+关于游戏对象的调试信息的显示方法的集合。
+
+LinkedList
+基本的链表数据结构
+
+Utils
+Object 和 String 检查和修改的工具方法. 包括 getProperty, pad, isPlainObject, extend 和mixin.

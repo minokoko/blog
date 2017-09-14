@@ -22,9 +22,25 @@
 	<script type="text/javascript" src="assets/js/phaser.min.js"></script>
 	<script type="text/javascript">
 		var processDead = false;
+		var totalTime = 30; 
+		var loadTimeDelay = 2000;
+		var count = 3;
+		var score = 0;
 		var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'gameContainer');
 		var states = {
 			loading: function(){
+				this.init = function(){
+					if(!game.device.desktop){
+						game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+						game.scale.forcePortrait = true;				
+					}else{
+						game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+					}
+					//游戏居中
+					game.scale.pageAlignHorizontally = true;
+					game.scale.pageAlignVertically = true;
+					game.scale.refresh();
+				}
 				this.preload = function(){
 					game.stage.backgroundColor = '#791265';
 		        	game.load.image('process', 'assets/images/processing.png');
@@ -85,33 +101,86 @@
 		            }
 		            setTimeout(function(){
 		            	onLoad();
-		            },2000);
+		            },loadTimeDelay);
 		        }
 		    },
 		    create: function(){
-		        //预加载阶段
-		        this.preload = function(){
-		            console.log('create : preload');
-		        }
 		        //该场景创建阶段
 		        this.create = function(){
-		            console.log('create : create');
-		            setTimeout(function(){
-		                game.state.start('play');
-		            },2000);
+		        	var start = game.add.sprite(game.world.width/2, 0, 'start');
+		        	start.anchor.setTo(0.5,0);
+		        	start.width = game.world.width;
+		        	start.height = game.world.height;
+
+		        	var startBtn = game.add.image(game.world.width/2, game.world.height-80, 'startBtn');
+		        	startBtn.scale.setTo(0.5);
+		        	startBtn.anchor.setTo(0.5);
+
+		        	startBtn.inputEnabled = true;
+		        	startBtn.events.onInputUp.add(function(){
+		        		game.state.start('play');
+		        	},this);
 		        }
 		    },
 		    play: function(){
-		        //预加载阶段
-		        this.preload = function(){
-		            console.log('play : preload');
-		        }
 		        //该场景创建阶段
 		        this.create = function(){
-		            console.log('play : create');
-		            setTimeout(function(){
-		                game.state.start('over');
-		            },2000);
+		            var titleIcon = game.add.sprite(10, 10, 'title');
+		            titleIcon.scale.setTo(0.5);
+		            var title = game.add.text(20+titleIcon.width, 10+titleIcon.height/2, 'X',{fill:'#fff',fontSize:'16px',fontWeight: 400});
+		        	title.anchor.setTo(0, 0.5);
+		        	var scoreText = game.add.text(40+titleIcon.width, 10+titleIcon.height/2, score,{fill:'#fff',fontSize:'16px',fontWeight: 400});
+		        	scoreText.anchor.setTo(0, 0.5);
+		        	this.scoreText = scoreText;
+
+		        	var timeSecond = game.add.text(game.world.width-40, 10+titleIcon.height/2, totalTime+'s',{fill:'#fff',fontSize:'16px',fontWeight: 400});
+		        	timeSecond.anchor.setTo(0, 0.5);
+		        	this.timeSecond = timeSecond;
+
+		        	this.timeLoop = game.time.events.loop(1000, this.updateTime, this);
+
+		        	var pockets = game.add.group();
+					pockets.enableBody = true;
+					pockets.setAll('outOfBoundsKill', true);
+					pockets.setAll('checkWorldBounds',true);
+
+					game.physics.startSystem(Phaser.Physics.Arcade);
+		        	this.createTimer = game.time.events.loop(500, function(){
+						this.createPocket(pockets);
+					},this);
+		        }
+		        this.updateTime = function(){
+		        	if(totalTime*1000>=1000){
+		        		totalTime  = totalTime - 1;
+		        	}else{
+		        		totalTime = 0;
+		        		game.time.events.remove(this.timeLoop);
+		        	}
+		        	this.timeSecond.text = totalTime + 's';
+		        }
+		        this.createPocket = function(pockets){
+					var img = game.cache.getImage('redpacket');
+	        		var w = game.world.width / 5;
+	        		var h = w / img.width * img.height;
+
+		        	for(var i=0;i<count;i++){
+		        		var x = game.rnd.integerInRange(0, 4*w);
+		        		var y = -(h*(i+1));
+						var pocket = pockets.create(game.rnd.integerInRange(0, 4*w), y, 'redpacket');
+						pocket.width = w;
+	            		pocket.height = h;
+						game.physics.enable(pocket);
+						pocket.body.gravity.y = game.rnd.integerInRange(100, 250);
+						pocket.inputEnabled = true;
+
+						pocket.events.onInputUp.add(this.addScore,this);
+		        	}
+		        }
+		        this.addScore = function(pocket){
+		        	score += 1;
+		        	pocket.destroy();
+
+		        	this.scoreText.text = score;
 		        }
 		    },
 		    over: function(){
