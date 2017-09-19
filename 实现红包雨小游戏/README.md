@@ -1,5 +1,5 @@
 ## Phaser实现小游戏
-### 起源-一纸需求  
+### 起始-一纸需求  
 某日，本程序猿正在假装孜孜不倦的努力工作。  
 产品经理：“一会儿来参加个需求会议，这个先看看”;  
 伴随着声音一张纸飘飘落下(不要问为什么需求写纸上，产品经理乐意)。
@@ -51,7 +51,7 @@ Phaser.Game Phaser提供的游戏对象构造器，通过new的方式创建Phase
 
 当然这些场景并不是Phaser强制要求的，你可以按照自己的习惯、自己的理解去划分游戏阶段，然后你所需要做的只是：**告诉Phaser.Game对象全部的游戏场景，即调用GAME提供的添加state的方法**。  
 然后，紧接上步创建全部state：  
-```javascript
+``` javascript
 //添加state方法一:
 var game = new Phaser.Game(w, h, Phaser.AUTO, '#container', {preload： preload, create: create, play: play, over: over});
 function preload(){}
