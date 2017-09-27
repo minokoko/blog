@@ -89,16 +89,65 @@ e --> k[弹窗组件]
     }, false);
 </script>
 ```
-这可以算是一个简陋的‘组件’，它实现了自动计算输入字符长度的功能。它拥有自己的UI、数据、数据逻辑。现阶段的‘组件’还基本只算是某个功能单元的集合了，连封装都没有......  
+这可以算是一个简陋的‘组件’，它实现了自动计算输入字符长度的功能。它拥有自己的UI、数据、数据逻辑。这个‘组件’还基本只算是某个功能单元的集合了，连封装都没有......  
 然后，无数大牛开始探索研究，各种各样的组件化方案、框架被提出，W3C就在这时提出了Web Components标准。虽然它因为自身的局限性并为取得很好的成效。我们仍然可以从中借鉴经验。
 
 #### Web Components标准
 Web Components定位是可供用户重复利用的组件接口，而且它是浏览器的一部分。不同于用javascript代码作为组件的生成管理工具，我们可以直接在浏览器中使用它。它是有四项技术构成的：custome element、HTML templates、Shadow DOM、HTML Imports。
 ##### 1. Custom Element 自定义元素
-##### 2. HTML template 页面模板
-##### 3. Shadow DOM 独立HTML片段
-##### 4. HTML Imports 组件依赖引用
+让我们像使用原生HTML标签一样，使用自定义的元素标签。元素标签要求是语义化，知标签而知其功能。例如，<datepicker>则就代表着时间选择器组件标签。     
+*注：现在官方API已经升级为ES6的模式，为了方便这里仍采用ES5模式*
+```javascript
+//继承HTMLElement，使自定义标签具备原生标签的基本能力
+var cInput = Object.create(HTMLElement.prototype);
 
+//回调方法，插入自定义表签的实际内容
+cInput.createdCallback = function(){
+    //创建独立作用域
+    var shadow = this.createShadowRoot();
+
+    //TODO
+    var dom = document.createElement('div');
+    
+    shadow.appendChild(dom);
+};
+    
+//注册自定义标签
+var CInput =  document.registerElement('c-input', {
+    prototype: cInput
+});
+```
+##### 2. HTML template 页面模板
+这是WebComponents定义的原生模板能力，不同于模板工具库，它真的很原始，没有那些额外的渲染能力。
+```html
+<template id="cInnputTmpl">
+    //特别纯粹的原生模板
+    <div class="cInput">
+        <input type="text" name="text" id="text">
+        <span class="num" id="num">0个字符</span>
+    </div>
+</template>
+```
+template标签内就是我们组件所需要的UI模板，需要的时候只需：**xxx.innerHTML = document.getELementById('cInputTmpl').innerHTML**。如果你要做页面随数据的动态更新，那么请自力更生。
+
+##### 3. Shadow DOM 独立HTML片段
+Shadow Dom 就是将html、css隔离开来，有自己的作用域，内部独立不受影响。
+```javascript
+//创建独立作用域
+var shadow = this.createShadowRoot();
+
+//TODO
+var dom = document.createElement('div');
+
+shadow.appendChild(dom);
+```
+非常简单调用**createShadowRoot**方法即可。生成shadow可以向DOM节点那样添加内容。
+##### 4. HTML Imports 组件依赖引用
+有了组件，还需要解决页面如何引用组件。
+```html
+<link rel="import" href="cinput.html">
+```
+以上就是WebComponents所涉及的四项技术。现在对WebComponents的支持并不好，它并不能真正应用到项目开发中，我们更多的是从中借鉴组件创建的理念。  
 Web Components提出了该如何实现组件，它确定了组件应该是————通过一种标准化的非入侵的方式封装一个组件。表明了组件所具备的特性：
 1. ‘高度内聚，低耦合’————组件应该是高内聚，只负责本身所提供的功能，不依赖与其他组件
 2. ‘拥有自己的作用域’————拥有自己独立的作用域，不会出现全局冲突
