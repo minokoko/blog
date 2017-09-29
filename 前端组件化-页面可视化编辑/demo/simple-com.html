@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>简单的组件</title>
+</head>
+<body>
+	<!-- UI层 -->
+	<style type="text/css">
+	    div{
+	    	margin: 0 auto;
+	        width: 200px;
+	        padding: 20px 0;
+	        text-align: center;
+	        background-color: #f0f;
+	    }
+	    .num {
+	    	display: block;
+	    	width: 100%;
+	    }
+	</style>
+	<div>
+	    <input type="text" name="text" id="text">
+	    <span class="num" id="num">0个字符</span>
+	</div>
+	<!-- 数据交互 -->
+	<script type="text/javascript">
+		var num = 0;
+		var $input = document.getElementById('text');
+		var $num = document.getElementById('num');
+		$input.addEventListener('input', function(e){
+			var target = e.target;
+			var val = target.value;
+			var l = val.length;
+			$num.innerHTML = l + '个字符';
+		}, false);
+	</script>
+</body>
+</html>
