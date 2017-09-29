@@ -1,7 +1,15 @@
 ## 组件实现和组件化开发
 接上篇[组件化](COMPONENTS.md)，现在聊聊如何实现组件和组件化开发。
 ### 组件设计思想和实现
-Web Components还未成熟，不能很好的应用到实际项目中(*angular2称已全面拥抱，暂时还未了解*)。我们仍面临着-实现组件，这一问题。那么，抛开Web Components的四项技术我们可以遵循Web Components标准去实现更符合现在前端领域的组件实现方案。
+Web Components还未成熟，不能很好的应用到实际项目中(*angular2称已全面拥抱，暂时还未了解*)。我们仍面临着-实现组件，这一问题。那么，抛开Web Components的四项技术，我们仍可遵循Web Components标准去实现更符合现在前端领域的组件实现方案。而在前端大牛们的努力下，为我们提供了多种组件的实现方案和框架。  
+1. React Components
+2. Vue Components
+3. Angular Directives
+4. Ember Components
+5. Backbone Components 
+......  
+
+在这不去讨论每种框架组件实现方法和优劣，后续会单独出一篇介绍文章。我们在这选取时下最流行的React、Vue、Angular的组件实现方法进行参考，来实现一个简单的组件例子。
 #### 创建自定义标签
 #### 初始化组件
 #### 组件UI渲染
