@@ -123,7 +123,7 @@ walkComs3(treeData, function(com){
 });
 ```
 这三种遍历方法，非递归的性能要高于递归，做一个简单的测试。
-分别打开以下三个文件，查看console输入台。
+分别打开以下三个文件，查看console输入台。  
 [递归](tree_re.html)  
 [循环广度](tree_g.html)  
 [循环深度](tree_d.html)
