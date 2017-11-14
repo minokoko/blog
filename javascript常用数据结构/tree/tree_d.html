@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<title>循环深度遍历</title>
+</head>
+<body>
+<script>
+	var treeData = [{
+	    label: 'Container',
+	    key: 'c0',
+	    content:[{
+	        label: 'Section',
+	        key: 's0',
+	        content:[{
+	            label: 'Element',
+	            key: 'e0'
+	        }]
+	    }
+	    ]
+	},{
+	    label: 'Container',
+	    key: 'c1',
+	    content:[{
+	        label: 'Section',
+	        key: 's1',
+	        content:[{
+	            label: 'Element',
+	            key: 'e1'
+	        }]
+	    },{
+	        label: 'Section',
+	        key: 's2',
+	        content:[{
+	            label: 'Element',
+	            key: 'e2'
+	        }]
+	    }]
+	},{
+	    label: 'Container',
+	    key: 'c2',
+	    content:[{
+	        label: 'Section',
+	        key: 's3',
+	        content:[{
+	            label: 'Element',
+	            key: 'e3'
+	        }]
+	    }]
+	},{
+	    label: 'Container',
+	    key: 'c0',
+	    content:[{
+	        label: 'Section',
+	        key: 's0',
+	        content:[{
+	            label: 'Element',
+	            key: 'e0'
+	        }]
+	    }
+	    ]
+	},{
+	    label: 'Container',
+	    key: 'c1',
+	    content:[{
+	        label: 'Section',
+	        key: 's1',
+	        content:[{
+	            label: 'Element',
+	            key: 'e1'
+	        }]
+	    },{
+	        label: 'Section',
+	        key: 's2',
+	        content:[{
+	            label: 'Element',
+	            key: 'e2'
+	        }]
+	    }]
+	},{
+	    label: 'Container',
+	    key: 'c2',
+	    content:[{
+	        label: 'Section',
+	        key: 's3',
+	        content:[{
+	            label: 'Element',
+	            key: 'e3'
+	        }]
+	    }]
+	},{
+	    label: 'Container',
+	    key: 'c0',
+	    content:[{
+	        label: 'Section',
+	        key: 's0',
+	        content:[{
+	            label: 'Element',
+	            key: 'e0'
+	        }]
+	    }
+	    ]
+	},{
+	    label: 'Container',
+	    key: 'c1',
+	    content:[{
+	        label: 'Section',
+	        key: 's1',
+	        content:[{
+	            label: 'Element',
+	            key: 'e1'
+	        }]
+	    },{
+	        label: 'Section',
+	        key: 's2',
+	        content:[{
+	            label: 'Element',
+	            key: 'e2'
+	        }]
+	    }]
+	},{
+	    label: 'Container',
+	    key: 'c2',
+	    content:[{
+	        label: 'Section',
+	        key: 's3',
+	        content:[{
+	            label: 'Element',
+	            key: 'e3'
+	        }]
+	    }]
+	},{
+	    label: 'Container',
+	    key: 'c0',
+	    content:[{
+	        label: 'Section',
+	        key: 's0',
+	        content:[{
+	            label: 'Element',
+	            key: 'e0'
+	        }]
+	    }
+	    ]
+	},{
+	    label: 'Container',
+	    key: 'c1',
+	    content:[{
+	        label: 'Section',
+	        key: 's1',
+	        content:[{
+	            label: 'Element',
+	            key: 'e1'
+	        }]
+	    },{
+	        label: 'Section',
+	        key: 's2',
+	        content:[{
+	            label: 'Element',
+	            key: 'e2'
+	        }]
+	    }]
+	},{
+	    label: 'Container',
+	    key: 'c2',
+	    content:[{
+	        label: 'Section',
+	        key: 's3',
+	        content:[{
+	            label: 'Element',
+	            key: 'e3'
+	        }]
+	    }]
+	}];
+	function walkComs3(component, callback){
+	    if(!component || component.length < 1){
+	        return false;
+	    }
+	    var stack = [];
+	    component.forEach(function(com, i){
+	        stack.push(com);
+	    });
+	    var tmp;
+	    while(stack.length){
+	        tmp = stack.shift();
+	        callback(tmp);
+	        var children = tmp.content;
+	        if(children && children.length > 0){
+	            stack = children.concat(stack);
+	        }
+	    }
+	}
+	var n3 = new Date().getTime();
+	walkComs3(treeData, function(com){
+	    console.log(com.key);
+	});
+	console.log('time 2:' , new Date().getTime() - n3);
+</script>
+</body>
+</html>
