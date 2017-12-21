@@ -330,4 +330,4 @@ iphone 5 dpr = 2，视口宽度为320。那么，R = 320/750*75*2，R = 64。即
 
 })(window, window['lib'] || (window['lib'] = {}));
 ```
-**以上示例源码[demo]()
+**以上示例源码[demo](https://github.com/careycui/blog/tree/master/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%82%E9%85%8D)
