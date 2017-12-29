@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Star</title>
+	<style>
+		body{
+		}
+		canvas{
+			display: block;
+			border: 1px solid #4e4e4e;
+			position: absolute;
+			top: 0;
+			left: 50%;
+			margin-left: -350px;
+			/*background-color: #000;*/
+		}
+		.bg{
+			width: 700px;
+			height: 500px;
+			position: absolute;
+			top: 0;
+			left: 50%;
+			margin-left: -350px;
+			background: url('bg.jpg') no-repeat center center;
+			z-index: 1;
+			opacity: .4;
+		}
+	</style>
+</head>
+<body>
+	<div class="bg"></div>
+	<canvas id="cas" width="700px" height="500px"></canvas>
+	<script>
+		function StarBall(ops){
+			this.x = ops.x;
+			this.y = ops.y;
+			this.r = ops.r;
+			this.a = ops.a;
+			this.fillStyle = 'rgba(243, 190, 0, '+ ops.a +')';
+			this.origin = 0.1;
+		}
+		StarBall.prototype.changeOps = function(){
+			if(this.a >= 1){
+				this.origin = -0.05;
+			}
+			if(this.a <= 0.3){
+				this.origin = 0.05;
+			}
+			this.a = this.a + this.origin;
+			this.fillStyle = 'rgba(255, 255, 255,'+ this.a +')';
+			this.x = this.x + 0.05;
+			if(this.x > 700){
+				this.x = Math.floor(Math.random()*650 + 10);
+			}
+		}
+		StarBall.prototype.draw = function(ctx, time){
+				// if(!this.time){
+				// 	this.time = time;
+				// }
+				// if(time - this.time > 16){
+					this.changeOps();
+				// 	this.time = time
+				// }
+				ctx.beginPath();
+				ctx.fillStyle = this.fillStyle;
+				ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, true);
+				ctx.fill();
+		};
+		var cas = document.getElementById('cas');
+		var ctx = cas.getContext('2d');
+		var stars = (function(){
+			var tmp = [];
+			for(var i=0;i<100;i++){
+				var x = Math.floor(Math.random()*650 + 10);
+				var y = Math.floor(Math.random()*450 + 10);
+
+				tmp.push(new StarBall({
+					a: Math.random().toFixed(1)*1,
+					x: x,
+					y: y,
+					r: Math.random()*1
+				}));
+			}
+			return tmp;
+		})();
+
+		var drawStar = function (offset, x, y){
+			for(var i=0;i<30;i++){
+				ctx.beginPath();
+				ctx.fillStyle = 'rgba(200, 255, 255,' + (i+1)/30 + ')';
+
+				ctx.arc((x-i) - offset, (i - y) + offset, 1, 0, Math.PI*2, true);
+				ctx.fill();
+			}
+
+		};
+		var drawFlash = function (){
+			for(var i=0;i< stars.length;i++){
+				stars[i].draw(ctx, new Date().getTime());
+			}
+		}
+		drawFlash();
+		var offset =10;
+		var loopStar = function(timestamp){
+			ctx.globalCompositeOperation = 'source-over';
+  			ctx.globalAlpha = 0.8;
+			ctx.fillStyle = 'rgba(0, 0, 0, .3)';
+			ctx.fillRect(0, 0, 700, 500);
+			// ctx.clearRect(0, 0, 700, 500);
+			drawStar(offset, 900, 40);
+			drawStar(offset, 700, 40);
+			drawStar(offset, 500, 140);
+			drawStar(offset, 300, 80);
+			offset = offset + 10;
+			if(offset > 500){
+				offset = 6;
+			}
+			drawFlash();
+			window.requestAnimationFrame(loopStar);
+		}
+		window.requestAnimationFrame(loopStar);
+
+	</script>
+</body>
+</html>
