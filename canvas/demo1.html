@@ -3,33 +3,146 @@
 <head>
 	<title>canvas rotate</title>
 	<style>
-		canvas{
-			margin: 0 auto;
-			position: relative;
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.bg{
+			width: 700px;
+			height: 600px;
+			position: absolute;
+			top: 0;
 			left: 50%;
 			margin-left: -350px;
-			background: #000;
+			z-index: 1;
+			background: url('bg.jpg') no-repeat center center;
+			opacity: 0.5;
+		}
+		canvas{
+			margin: 0 auto;
+			position: absolute;
+			left: 50%;
+			margin-left: -350px;
 		}
 	</style>
 </head>
 <body>
 	<div>
+		<div class="bg"></div>
 		<canvas id="canvas" width="700px" height="600px"></canvas>
 	</div>
 	<script>
-		
+		var cas = document.getElementById('canvas');
+		var ctx = cas.getContext('2d');
 
-		var ctx = document.getElementById('canvas').getContext('2d');
-		var drawStar = function (x, y){
-			for(var i=0; i<30; i++){
-				ctx.fillStyle = 'rgba(200, 255, 255,' + (i+1)/30 + ')';
-				ctx.beginPath();
-				ctx.arc(x - (i*1.5), (i*1.5)+y, 2, 0, Math.PI*2, true);
-				ctx.fill();
+		// var drawStar = function (x, y){
+		// 	for(var i=0; i<30; i++){
+		// 		ctx.fillStyle = 'rgba(200, 255, 255,' + (i+1)/30 + ')';
+		// 		ctx.beginPath();
+		// 		ctx.arc(x - (i*1.5), (i*1.5)+y, 2, 0, Math.PI*2, true);
+		// 		ctx.fill();
+		// 	}
+
+		// };
+		// drawStar(400, 200);
+
+		var stars = [];
+		//星星对象，保存星星状态
+		function Star(){
+			this.x = Math.floor(Math.random()*(cas.width+100));
+			this.y = Math.floor(Math.random()*cas.height);
+			this.r = 0.5 + Math.random()*1;
+			this.alpha = Math.random();
+			this.alphaChange = 0.005;
+			this.fillStyle = 'rgba(255, 255, 255, '+ this.a +')';
+
+			stars.push(this);
+		}
+		Star.prototype.changeOps = function(){
+			if(this.alpha >= 1){
+				this.alphaChange = -0.01;
+			}else{
+				if(this.alpha <= 0.3){
+					this.alphaChange = 0.02;
+				}
 			}
+			this.alpha = this.alpha + this.alphaChange;
+			this.fillStyle = 'rgba(255, 255, 255,'+ this.alpha +')';
 
+			this.x = this.x + 0.05;
+			if(this.x > 700){
+				this.x = Math.floor(Math.random()*700);
+			}
+		}
+		Star.prototype.draw = function(ctx){
+				this.changeOps();
+
+				ctx.beginPath();
+				ctx.fillStyle = this.fillStyle;
+				ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, true);
+				ctx.fill();
 		};
-		drawStar(400, 200);
+		for(var i=0;i< 200;i++){
+			new Star().draw(ctx);
+		}
+
+
+		var shootingStars = [];//保存所有的流星
+		function ShootingStar(){
+		    this.offset = 10; //每次位移量
+		    this.x = (200 + Math.random()*cas.width).toFixed() * 1;
+		    this.y = -(Math.random()*100).toFixed() * 1;
+		    this.mx = 0;
+		    this.my = 0;
+		    this.count = 20;
+		    var qx = (0.5 + Math.random()).toFixed(2)*1;
+		    this.yoffset = this.offset * qx;
+
+		    this.stars = [];
+		    for(var i=0;i<this.count;i++){
+		        this.stars.push({
+		            color: 'rgba(200, 255, 255,' + ((i+1)/this.count).toFixed(3) + ')',
+		            x: this.x - i,
+		            y: (i*qx) - this.y
+		        });
+		    }
+		    shootingStars.push(this);
+		}
+		ShootingStar.prototype.changeOps = function (){
+		    if(this.mx > cas.width - this.x + 100 && this.my > cas.height - this.y + 100){
+		        this.mx = 0;
+		        this.my = 0;
+		    }
+		    this.mx = this.mx + this.offset;
+		    this.my = this.my + this.yoffset;
+		};
+		ShootingStar.prototype.moveDraw = function (){
+		    this.changeOps();
+		    for(var i=0;i<this.stars.length;i++){
+		        var tmp = this.stars[i];
+	   			ctx.beginPath();
+		        ctx.fillStyle = tmp.color;
+		        ctx.arc(tmp.x - this.mx, tmp.y + this.my, 1, 0, Math.PI*2, true);
+		    	ctx.fill();
+		    }
+		};
+		for(var j=0;j< 5;j++){
+		    new ShootingStar().moveDraw();
+		}
+
+		function render(){
+		    // ctx.clearRect(0, 0, 700, 600);
+		    ctx.fillStyle = 'rgba(0, 0, 0, .3)';
+			ctx.fillRect(0, 0, 700, 600);
+		    for(var i=0;i< stars.length;i++){
+		        stars[i].draw(ctx);
+		    }
+		    for(var j=0;j< shootingStars.length;j++){
+		    	shootingStars[j].moveDraw();
+		    }
+		    window.requestAnimationFrame(render);
+		}
+		window.requestAnimationFrame(render);
 	</script>
 </body>
 </html>
