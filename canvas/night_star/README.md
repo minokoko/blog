@@ -239,3 +239,5 @@ ctx.fillRect(0,0,canvas.width,canvas.height);
 4. 减少重复的调用canvas API
 
 等等......
+
+> 相关代码[CODE](https://github.com/careycui/blog/tree/master/canvas/night_star)
