@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>demo</title>
+	<style>
+		.block{
+			position: absolute;
+			width: 250px;
+			height: 250px;
+			transform: translate(100px, 100px);
+			border: 1px solid black;
+		}
+		.arc{
+			position: absolute;
+			width: 50px;
+			height: 50px;
+			border-radius: 100%;
+			background-color: #f0f;
+			transform: translate(200px, 100px);
+		}
+	</style>
+</head>
+<body>
+<div class="block"></div>
+<div class="arc" id="arc"></div>
+<script src="animator.js"></script>
+<script>
+	var $arc = document.getElementById('arc');
+	$arc.addEventListener('click', function(){
+		var count = 0;
+		var colors = ['#ff0', '#f0f', '#0ff', '#00f', '#0f0', '#f00'];
+
+		var ani = new Animator(2000, function(p){
+			console.log(p);
+			var dx = -100 * Math.sin(2*Math.PI*p) + 200;
+			var dy = -100 * Math.cos(2*Math.PI*p) + 200;
+
+			$arc.style.transform = 'translate('+ dx +'px,' + dy + 'px)';
+		});
+		var ani2 = new Animator(2000, function(p){
+			if(p === 1){
+				count += 1;
+			}
+			if(count>colors.length-1){
+				count = 0;
+			}
+			$arc.style.backgroundColor = colors[count];
+		});
+
+		ani.start(false);
+		ani2.start(function(){
+			ani2.start(false);
+		});
+	}, false);
+</script>
+</body>
+</html>

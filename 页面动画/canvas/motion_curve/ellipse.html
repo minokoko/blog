@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Ellipse Demo</title>
+	<style>
+		#canvas{
+			position: absolute;
+			left: 50%;
+			margin-left: -200px;
+			border: 1px solid #0ff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+		var $canvas = document.getElementById('canvas');
+		var ctx = $canvas.getContext('2d');
+
+		var $cacheCanvas = document.createElement('canvas');
+		$cacheCanvas.width = 20;
+		$cacheCanvas.height = 20;
+		var cacheCtx = $cacheCanvas.getContext('2d');
+
+		var $cacheCanvas2 = document.createElement('canvas');
+		$cacheCanvas2.width = 300;
+		$cacheCanvas2.height = 200;
+		var cacheCtx2 = $cacheCanvas2.getContext('2d');
+
+		function drawEllipse(context, x, y, a, b){
+			 //max是等于1除以长轴值a和b中的较大者
+			//i每次循环增加1/max，表示度数的增加
+			//这样可以使得每次循环所绘制的路径（弧线）接近1像素
+			var step = (a > b) ? 1 / a : 1 / b;
+			context.beginPath();
+			context.strokeStyle="#ff0";
+			context.moveTo(x + a, y); //从椭圆的右端点开始绘制
+			for (var i = 0; i < Math.PI*2; i += step)
+			{
+			    //参数方程为x = a * cos(i), y = b * sin(i)，
+			    //参数为i，表示度数（弧度）
+			    context.lineTo(x + a * Math.cos(i), y + b * Math.sin(i));
+			}
+			context.closePath();
+			context.stroke();
+		}
+
+		drawEllipse(cacheCtx2, 150, 100, 150, 100);
+
+
+		function drawMoveArc(){
+			cacheCtx.beginPath();
+			cacheCtx.fillStyle="#f0f";
+			cacheCtx.arc(10, 10, 10, 0, 2*Math.PI, true);
+			cacheCtx.closePath();
+			cacheCtx.fill();
+		}
+		drawMoveArc();
+
+		var offset = 180;
+		function move(){
+			if(offset > 360){
+				offset = 0;
+			}
+			var x = 150 * Math.cos(offset*Math.PI/180) + 190;
+			var y = 100 * Math.sin(offset*Math.PI/180) + 190;
+			offset += 2;
+			ctx.clearRect(0, 0, 400, 400);
+
+			ctx.drawImage($cacheCanvas2, 50, 100);
+			ctx.drawImage($cacheCanvas, x, y);
+
+			requestAnimationFrame(move);
+		}
+		requestAnimationFrame(move);
+	</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Paracurve Demo</title>
+	<style>
+		#canvas{
+			position: absolute;
+			left: 50%;
+			margin-left: -200px;
+			border: 1px solid #0ff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+		var $canvas = document.getElementById('canvas');
+		var ctx = $canvas.getContext('2d');
+
+		var $cacheCanvas = document.createElement('canvas');
+		$cacheCanvas.width = 20;
+		$cacheCanvas.height = 20;
+		var cacheCtx = $cacheCanvas.getContext('2d');
+
+		function drawParacurve(ar,br, d){
+			var b = getPara(ar, br, 100, 120, d);
+			ctx.beginPath();
+			ctx.strokeStyle="#ff0";
+			ctx.moveTo(ar, br);
+			var x=0, y=0, tangent;
+			while(x<100){
+				tangent = 2*d*x + b;
+				x = x + Math.sqrt(16/(tangent*tangent + 1));
+				y = d*x*x+b*x;
+				ctx.lineTo(ar+x,br+y);
+			}
+			// ctx.closePath();
+			ctx.stroke();
+		}
+
+		function getPara(x0,y0,x1,y1, a){
+			var x = x1 - x0;
+			var y = y1 - y0;
+			a = a||0.002;
+			var b = (y-a*x*x)/x;
+			return b;
+		}
+		// y=ax^2+bx;
+		// b=148.5;
+		drawParacurve(30, 30, Math.PI/200);
+
+		function drawMoveArc(){
+			cacheCtx.beginPath();
+			cacheCtx.fillStyle="#f0f";
+			cacheCtx.arc(10, 10, 10, 0, 2*Math.PI, true);
+			cacheCtx.closePath();
+			cacheCtx.fill();
+		}
+		drawMoveArc();
+
+		var ob = getPara(30, 30, 100, 120, Math.PI/200),
+			tangent,
+			startX = 0;
+		function move(){
+			if(startX > 100){
+				startX = 0;
+			}
+			tangent = 2*Math.PI/200*startX + ob;
+			startX = startX + Math.sqrt(16/(tangent*tangent + 1));
+			var x = 20 + startX;
+			var y = 20 + Math.PI/200*startX*startX+ob*startX;
+
+
+			ctx.clearRect(0, 0, 400, 400);
+			drawParacurve(30, 30, Math.PI/200);
+			ctx.drawImage($cacheCanvas, x, y);
+			requestAnimationFrame(move);
+		}
+		requestAnimationFrame(move);
+	</script>
+</body>
+</html>
