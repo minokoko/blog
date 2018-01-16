@@ -30,12 +30,10 @@
 而它们哥俩包含了各种各样的函数表达式。
 
 ### 运动轨迹  
-妈呀，好多运动轨迹的函数表达式呀：最简单的直线，稍复杂的弧线，在复杂写抛物线，更复杂三角函数线。。。。。。  
-
 运动轨迹从简单直线运动到复杂的无规则运动都是有自己的函数表达式。这里介绍几种动画效果中常用的运动轨迹表达式。  
 
 注：以下demo均采用canvas实现
-1. 圆形轨迹
+#### 1. 圆形轨迹
     > 相关表达式
     > (x-a)^2+(y-b)^2=r^2;
     > a b为圆心，x y为坐标
@@ -43,81 +41,135 @@
     > x = r \* cos(wt)
     > y = r \* sin(wt)  
 
-    ![三角函数](http://ozp3e2myx.bkt.clouddn.com/sanjiao.png)
+![三角函数](http://ozp3e2myx.bkt.clouddn.com/sanjiao.png)
 
-    小球运动-圆形轨迹demo  
-    ![小球运动-圆形](http://ozp3e2myx.bkt.clouddn.com/arcdemo.gif)  
-    画圆关键：
-    ```javascript
-    //R：常量圆形轨迹的半径；
-    //a , b常量 圆形轨迹的圆心
-    var x = R * Math.cos(deg*Math.PI/180) + a;
-    var y = R * Math.sin(deg*Math.PI/180) + b;
+小球运动-圆形轨迹demo  
+![小球运动-圆形](http://ozp3e2myx.bkt.clouddn.com/arcdemo.gif)  
+画圆关键：
+```javascript
+//R：常量圆形轨迹的半径；
+//a , b常量 圆形轨迹的圆心
+var x = R * Math.cos(deg*Math.PI/180) + a;
+var y = R * Math.sin(deg*Math.PI/180) + b;
 
-    requestAnimationFrame(move);
-    ```
+requestAnimationFrame(move);
+```
 
-    这里需要注意：**在关于角度的计算表达式中一般使用弧度制**， 关于弧度与角度的转换：  
+这里需要注意：**在关于角度的计算表达式中一般使用弧度制**， 关于弧度与角度的转换：  
     > 1度 = Math.PI/180
     > 1deg = 180/Math.PI
 
+#### 2. 椭圆轨迹  
+椭圆其实我是很抗拒的，连圆相关的计算表达式都还给老师，别说它了。咳咳，仍然还是需要了解椭圆的。  
+照例表达式如下：  
+> |PF1|+|PF2|=2a (2a>|F1F2|)
 
-2. 椭圆轨迹  
-    椭圆其实我是很抗拒的，连圆相关的计算表达式都还给老师，别说它了。咳咳，仍然还是需要了解椭圆的。  
-    照例表达式如下：  
-    > |PF1|+|PF2|=2a (2a>|F1F2|)
+(๑•ᴗ•๑) 这是个啥。。。。。。
+> 椭圆（Ellipse）是平面内到定点F1、F2的距离之和等于常数（大于|F1F2|）的动点P的轨迹，F1、F2称为椭圆的两个焦点。其数学表达式为：|PF1|+|PF2|=2a（2a>|F1F2|）。  
+> 方程式：  
+> 焦点在X轴, x^2/a^2 + y^2/b^2 = 1
+> 焦点在Y轴，y^2/a^2 + x^2/b^2 = 1
 
-    (๑•ᴗ•๑) 这是个啥。。。。。。
-    > 椭圆（Ellipse）是平面内到定点F1、F2的距离之和等于常数（大于|F1F2|）的动点P的轨迹，F1、F2称为椭圆的两个焦点。其数学表达式为：|PF1|+|PF2|=2a（2a>|F1F2|）。  
-    > 方程式：  
-    > 焦点在X轴, x^2/a^2 + y^2/b^2 = 1
-    > 焦点在Y轴，y^2/a^2 + x^2/b^2 = 1
+如果想更深入的拾取高中知识，请自行解决。   
+转化成我们可用的计算表达式:  
+> x = a*cos(wt) ， y = b*sin(wt)
 
-    如果想更深入的拾取高中知识，请自行解决。   
-    转化成我们可用的计算表达式:  
-    > x = a*cos(wt) ， y = b*sin(wt)
-
-    在canvas中没有提供画椭圆的API，这里通过椭圆方程式利用lineTo方法画椭圆(其他绘制椭圆的方法，可自行思考或搜索)。  
-    关键代码：  
-    ```javascript
-    function drawEllipse(context, x, y, a, b){
-         //max是等于1除以长轴值a和b中的较大者
-        //i每次循环增加1/max，表示度数的增加
-        //这样可以使得每次循环所绘制的路径（弧线）接近1像素
-        var step = (a > b) ? 1 / a : 1 / b;
-        context.beginPath();
-        context.strokeStyle="#ff0";
-        context.moveTo(x + a, y); //从椭圆的左端点开始绘制
-        for (var i = 0; i < 2 * Math.PI; i += step)
-        {
-            //参数方程为x = a * cos(i), y = b * sin(i)，
-            //参数为i，表示度数（弧度）
-            context.lineTo(x + a * Math.cos(i), y + b * Math.sin(i));
-        }
-        context.closePath();
-        context.stroke();
+在canvas中没有提供画椭圆的API，这里通过椭圆方程式利用lineTo方法画椭圆(其他绘制椭圆的方法，可自行思考或搜索)。  
+关键代码：  
+```javascript
+function drawEllipse(context, x, y, a, b){
+     //max是等于1除以长轴值a和b中的较大者
+    //i每次循环增加1/max，表示度数的增加
+    //这样可以使得每次循环所绘制的路径（弧线）接近1像素
+    var step = (a > b) ? 1 / a : 1 / b;
+    context.beginPath();
+    context.strokeStyle="#ff0";
+    context.moveTo(x + a, y); //从椭圆的左端点开始绘制
+    for (var i = 0; i < 2 * Math.PI; i += step)
+    {
+        //参数方程为x = a * cos(i), y = b * sin(i)，
+        //参数为i，表示度数（弧度）
+        context.lineTo(x + a * Math.cos(i), y + b * Math.sin(i));
     }
-    ```
-    小球运动-椭圆轨迹  
-    ![小球运动-椭圆轨迹](http://ozp3e2myx.bkt.clouddn.com/ellipse.gif)  
-    椭圆轨迹关键:  
-    ```javascript
-    //ar, br：常量椭圆轨迹的焦点距离；
-    //a , b常量 椭圆轨迹的中心
-    var x = ar * Math.cos(offset*Math.PI/180) + a;
-    var y = br * Math.sin(offset*Math.PI/180) + b;
+    context.closePath();
+    context.stroke();
+}
+```
+小球运动-椭圆轨迹  
+![小球运动-椭圆轨迹](http://ozp3e2myx.bkt.clouddn.com/ellipse.gif)  
+椭圆轨迹关键:  
+```javascript
+//ar, br：常量椭圆轨迹的焦点距离；
+//a , b常量 椭圆轨迹的中心
+var x = ar * Math.cos(offset*Math.PI/180) + a;
+var y = br * Math.sin(offset*Math.PI/180) + b;
 
-    requestAnimationFrame(move);
-    ```
-3. 抛物线轨迹
-    关于抛物线，截取圆或者椭圆的某一部分可以当做抛物线，或者贝塞尔曲线也可以模拟出抛物线。但是，抛物有着自己的函数表达式。  
-    照例表达式如下:  
-    > y=ax^2+bx+c
-    为了便于计算，我们都假设抛物线经过原点(0, 0)，那么可以得到**y=ax^2+bx**。a类似常量弧度由我们给定值，剩下的只需要求解b的值。  
-    > b = (y-ax^2)/x
+requestAnimationFrame(move);
+```
+#### 3. 抛物线轨迹
+关于抛物线，截取圆或者椭圆的某一部分可以当做抛物线，或者贝塞尔曲线也可以模拟出抛物线。但是，抛物有着自己的函数表达式。  
+照例表达式如下:  
+> y=ax^2+bx+c
+为了便于计算，我们都假设抛物线经过原点(0, 0)，那么可以得到**y=ax^2+bx**。a类似常量弧度由我们给定值，剩下的只需要求解b的值。
+> b = (y-ax^2)/x
 
-    小球运动-抛物线  
-    ![抛物线](http://ozp3e2myx.bkt.clouddn.com/para.gif)
-4. 摆动轨迹
-5. 三角函数类
+另外一个关键知识点，抛物线线上的相邻点的切线可以反映出抛物线的轮廓，切线的公式：
+> y` = 2ax + b
+
+![切线相连可以看到抛物线轮廓](http://ozp3e2myx.bkt.clouddn.com/qiexian.jpg)
+
+那么，我们就可以通过多个点的切线相连得到抛物线。关键是如何确定每个坐标点。  
+每次坐标的增量或者称为变化率(专业词)，我们也可以通过一些切线相关的表达式计算。  
+t1 t2两点无线接近，割线就是变成了切线。那么，我们可以得到增量(变化率,切线,斜率)的表达式:  
+> x^2+y^2=incr
+> 公式推导
+> tangent = y` = y/x
+> y = tangent*x
+> (tangent*x)^2 + x^2=incr
+> 转化为js表达式
+> x = Math.sqrt(incr/(tangent*tangent+1));
+
+![切线求速率](http://ozp3e2myx.bkt.clouddn.com/qianxian_speed.jpg)  
+通过推到出的公式就可以画出我们所需要的抛物线轨迹。 
+
+关键代码：  
+```javascript
+function ParaCurve(ctx,start,target,a){
+    this.start = start;
+    this.target = target;
+    this.dx = target.x - start.x;
+    this.dy = target.y - start.y;
+    this.a = a || 0.002;//a>0抛物线开口向上，a<0抛物线开口向下
+    this.b = (this.dy-this.a*this.dx*this.dx)/this.dx;
+
+    this.draw(ctx);
+}
+ParaCurve.prototype.draw = function (ctx){
+    var b = this.b;
+    var a = this.a;
+    var start = this.start;
+    var ox = start.x;
+    var oy = start.y;
+    var dx = this.dx;
+    var startx = 0;
+    var starty = 0;
+    var incr = 0;
+
+    ctx.beginPath();
+    ctx.strokeStyle="#ff0";
+    ctx.moveTo(ox, oy);
+    while(startx < dx){
+        incr = 2*a*startx + b;
+        startx = startx + Math.sqrt(16/(incr*incr + 1));
+        starty = a*startx*startx + b*startx;
+        ctx.lineTo(ox+startx, oy+starty);
+    }
+    ctx.stroke();
+}
+```
+小球运动-抛物线  
+![抛物线](http://ozp3e2myx.bkt.clouddn.com/para.gif)
+#### 4. 三角函数类
+    选取正弦曲线作为案例。  
+
 ### 运动曲线与缓动函数
