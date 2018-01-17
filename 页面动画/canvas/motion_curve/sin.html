@@ -17,26 +17,69 @@
 	<script>
 		var $canvas = document.getElementById('canvas');
 		var ctx = $canvas.getContext('2d');
-
 		var $cacheCanvas = document.createElement('canvas');
 		$cacheCanvas.width = 20;
 		$cacheCanvas.height = 20;
 		var cacheCtx = $cacheCanvas.getContext('2d');
 
-		function drawSin(){
+		var wave = {
+			x: 10,
+			y: 200,
+			w: 200,
+			h: 100
+		};
+
+		function drawSin(ctx, x0, y0, w, h){
 			ctx.beginPath();
 			ctx.strokeStyle='#ff0';
 			var x = 0;
 			var y = 0;
-			ctx.moveTo(0, 200);
-			for(var i=0;i<2*Math.PI;i++){
-				x = i*50;
-				y = Math.sin(x)*50;
-				ctx.lineTo(x, 200 + y);
+			ctx.moveTo(x0, y0);
+			for(var i=0;i<=2*Math.PI;i+=0.01){
+				x = i*w/(2*Math.PI);
+				y = Math.sin(i)*h;
+				ctx.lineTo(x0+x, y0 + y);
 			}
 			ctx.stroke();
 		}
-		drawSin();
+		drawSin(ctx, wave.x, wave.y, wave.w, wave.h);
+		ctx.strokeStyle='#000';
+		ctx.beginPath();
+		ctx.moveTo(100, 0);
+		ctx.lineTo(100, 400);
+		ctx.moveTo(0, 200)
+		ctx.lineTo(400, 200);
+		ctx.stroke();
+
+		function drawMoveArc(){
+			cacheCtx.beginPath();
+			cacheCtx.fillStyle="#f0f";
+			cacheCtx.arc(10, 10, 10, 0, 2*Math.PI, true);
+			cacheCtx.closePath();
+			cacheCtx.fill();
+		}
+		drawMoveArc();
+
+		var offset = 0;
+		var direction = 1;
+		function move(){
+			if(offset > Math.PI*2){
+				direction = -1;
+			}
+			if(offset < 0){
+				direction = 1;
+			}
+			var x = offset*200/(2*Math.PI);
+			var y = Math.sin(offset)*100 + 190;
+			offset += 0.05*direction;
+			ctx.clearRect(0, 0, 400, 400);
+			drawSin(ctx, wave.x, wave.y, wave.w, wave.h);
+			drawSin(ctx, wave.x+wave.w, wave.y, wave.w+100, wave.h+30);
+			ctx.drawImage($cacheCanvas, x, y);
+
+			requestAnimationFrame(move);
+		}
+		requestAnimationFrame(move);
 	</script>
 </body>
 </html>

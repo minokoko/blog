@@ -170,6 +170,32 @@ ParaCurve.prototype.draw = function (ctx){
 小球运动-抛物线  
 ![抛物线](http://ozp3e2myx.bkt.clouddn.com/para.gif)
 #### 4. 三角函数类
-    选取正弦曲线作为案例。  
+选取正弦曲线作为案例。  
+照例表达式:  
+> y=sin(x)
 
+关键代码： 
+```javascript
+function drawSin(ctx, x0, y0, w, h){
+    ctx.beginPath();
+    ctx.strokeStyle='#ff0';
+    var x = 0;
+    var y = 0;
+    ctx.moveTo(x0, y0);
+    for(var i=0;i<=2*Math.PI;i+=0.01){
+        x = i*w/(2*Math.PI);
+        y = Math.sin(i)*h;
+        ctx.lineTo(x0+x, y0 + y);
+    }
+    ctx.stroke();
+}
+drawSin(ctx, 0, 200, 200, 100);
+```
+![正弦曲线](http://ozp3e2myx.bkt.clouddn.com/sin.gif)
+
+**y=sin(x)**我们称之为标准纯正的正弦函数公式，而我们应用的通用正弦曲线为:  
+> y = A*sin(x-deg)
+
+A称之为波幅(纵轴偏移量)，deg为相偏移(横轴左右)。
+这里还有一个相关实例[波形频谱]
 ### 运动曲线与缓动函数
