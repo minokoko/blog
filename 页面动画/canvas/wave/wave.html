@@ -21,32 +21,32 @@
 		var waves=[{
 			x: 0,
 			y: 250,
-			w: 150,
-			h: 50,
-			c: Math.floor(800/150)
+			w: 120,
+			h: 70,
+			c: Math.floor(800/120)
 		},{
 			x: 0,
 			y: 260,
-			w: 170,
-			h: 60,
-			c: Math.floor(800/170)
+			w: 140,
+			h: 40,
+			c: Math.floor(800/140)
 		},{
 			x: 0,
 			y: 280,
-			w: 190,
-			h: 40,
-			c: Math.floor(800/190)
+			w: 110,
+			h: 80,
+			c: Math.floor(800/110)
 		},{
 			x: 0,
 			y: 300,
-			w: 200,
-			h: 88,
+			w: 90,
+			h: 40,
 			c: Math.floor(800/200)
 		},{
 			x: 0,
 			y: 320,
-			w: 150,
-			h: 77,
+			w: 120,
+			h: 100,
 			c: Math.floor(800/150),
 			direction: -1
 		},{
@@ -63,7 +63,7 @@
 			c: Math.floor(800/140),
 			direction: -1
 		}];
-		function drawWave(ctx, x0, y0, w, h, c, d){
+		function drawWave(ctx, x0, y0, w, h, c, d, o){
 			var d = d || 1;
 			ctx.beginPath();
 			ctx.strokeStyle='rgba(255,255,255, 0.4)';
@@ -71,34 +71,30 @@
 			var y = 0;
 
 			ctx.moveTo(x0, y0);
-			// for(var i=0;i<=2*Math.PI;i+=0.01){
-			// 	x = i*w/(2*Math.PI);
-			// 	y = d*Math.sin(i)*h;
-			// 	ctx.lineTo(x0+x, y0 + y);
-			// }
-			for(var i=0;i<=800;i += 25){
-				x = 0.1 + (400-i)/800;
-				y= d*Math.sin(i)*h;
+
+			for(var i=0;i<=800;i += 10){
+				x = o + (-y0+i)/w;
+				y= d*Math.sin(x)*h;
 				ctx.lineTo(x0+i, y0 + y);
 			}
 			ctx.stroke();
 		}
-		// for(var i=0;i<waves.length;i++){
-			var tmp = waves[0];
-			drawWave(ctx, tmp.x, tmp.y, tmp.w, tmp.h, tmp.c, tmp.direction);
-		// }
-		var offset = 10;
+		for(var i=0;i<waves.length;i++){
+			var tmp = waves[i];
+			drawWave(ctx, tmp.x, tmp.y, tmp.w, tmp.h, tmp.c, tmp.direction, 0);
+		}
+		var offset = 0.01;
 		function move(){
 			ctx.clearRect(0,0, 800, 600);
 			for(var i=0;i<waves.length;i++){
 				var tmp = waves[i];
-				drawWave(ctx, tmp.x+offset, tmp.y, tmp.w, tmp.h, tmp.c, tmp.direction);
+				drawWave(ctx, tmp.x, tmp.y, tmp.w, tmp.h, tmp.c, tmp.direction, offset*tmp.c);
 			}
-			offset +=10;
+			offset -=0.01;
 
 			requestAnimationFrame(move);
 		}
-		// requestAnimationFrame(move);
+		requestAnimationFrame(move);
 	</script>
 </body>
 </html>
