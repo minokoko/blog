@@ -169,7 +169,7 @@ ParaCurve.prototype.draw = function (ctx){
 ```
 小球运动-抛物线  
 ![抛物线](http://ozp3e2myx.bkt.clouddn.com/para.gif)
-#### 4. 三角函数类
+#### 4. 三角函数类轨迹
 选取正弦曲线作为案例。  
 照例表达式:  
 > y=sin(x)
@@ -197,6 +197,19 @@ drawSin(ctx, 0, 200, 200, 100);
 > y=Asin(kx-wt-Φ)
 
 A称之为波幅(纵轴偏移量)，k为可控制周期数(波数)，wt为改变的弧度，Φ为相偏移(横轴左右)。
-这里还有一个相关实例[正弦波动画]()
+这里还有一个相关实例[正弦波动画](https://github.com/careycui/blog/tree/master/%E9%A1%B5%E9%9D%A2%E5%8A%A8%E7%94%BB/canvas/wave)
 ![正弦波动画](http://ozp3e2myx.bkt.clouddn.com/sin_wave.gif)
+#### 5. 扩展三角函数-应用于元素自身改变
+我们可以通过三角函数的正弦曲线来获得一组循环的变量，使用这组变量就可以完成一个脉冲动画。  
+> y = sin(x) + 1
+> 0<= y <=1
+
+完成效果图：  
+![脉冲](http://ozp3e2myx.bkt.clouddn.com/pulse.gif?1111)
+
+如果有兴趣可以对该例进行扩展，完成一个完整的音频谱的背景。
+
+**同样的，我们都可以扩展这些函数表达式，以它们为变化因子，应用到不同的动画中。**
+
 ### 运动曲线与缓动函数
+运动曲线是关于速率的变化。
