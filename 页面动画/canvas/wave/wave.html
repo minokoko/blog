@@ -22,7 +22,7 @@
 			x: 0,
 			y: 250,
 			w: 120,
-			h: 70,
+			h: 100,
 			c: Math.floor(800/120)
 		},{
 			x: 0,
@@ -74,6 +74,7 @@
 
 			for(var i=0;i<=800;i += 10){
 				x = o + (-y0+i)/w;
+				// x = o + i/w*Math.PI*2;
 				y= d*Math.sin(x)*h;
 				ctx.lineTo(x0+i, y0 + y);
 			}
