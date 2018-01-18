@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charse="utf-8">
+	<title>Map demo</title>
+	<style>
+		#bgcanvas, #canvas, #lcanvas{
+			position: absolute;
+			left: 50%;
+			margin-left: -262px;
+			width: 524px;
+			height: 394px;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="bgcanvas" width="524px" height="394px"></canvas>
+	<canvas id="canvas" width="524px" height="394px"></canvas>
+	<canvas id="lcanvas" width=524px height="394px"></canvas>
+	<script>
+		var canvas = document.getElementById('bgcanvas');
+		var ctx = canvas.getContext('2d');
+
+
+		var main = document.getElementById('canvas');
+		var mctx = main.getContext('2d');
+		mctx.globalAlpha  = 0.95;
+
+		var cacheCanvas = document.createElement('canvas');
+		var cctx = cacheCanvas.getContext('2d');
+		cacheCanvas.width=524;
+		cacheCanvas.height=394;
+		cctx.globalCompositeOperation = 'copy';
+
+		
+		var lcanvas = document.getElementById('lcanvas');
+		var lctx = lcanvas.getContext('2d');
+
+		function TargetBall(arc, ctx){
+			this.x = arc.x;
+			this.y = arc.y;
+			this.r = 0;
+			this.color = arc.color;
+			this.ctx = ctx;
+			this.modify = arc.modify||25;
+			this.offset = 0.4;
+		}
+		TargetBall.prototype.update=function(){
+			this.r += this.offset;
+			if(this.r > this.modify){
+				this.r = 0;
+			}
+			this.draw(this.r);
+		};
+		TargetBall.prototype.draw=function(r){
+			this.ctx.beginPath();
+			this.ctx.arc(this.x, this.y, r, 0, 2*Math.PI);
+			this.ctx.closePath();
+			this.ctx.lineWidth = 2;
+			this.ctx.strokeStyle=this.color;
+			this.ctx.stroke();
+		};
+		function TargetEllipse(ell, ctx){
+			this.x = ell.x;
+			this.y = ell.y;
+			this.ar = 0;
+			this.br = 0;
+			this.color = ell.color;
+			this.ctx = ctx;
+			this.modify_a = ell.modify_a||25;
+			this.modify_b = ell.modify_b||15;
+			this.offset = 0.4;
+		}
+		TargetEllipse.prototype.update=function(){
+			this.ar += this.offset;
+			this.br += this.offset/2;
+			if(this.r > this.modify_a || this.br > this.modify_b){
+				this.ar = 0;
+				this.br = 0;
+			}
+			this.draw(this.ar, this.br);
+		};
+		TargetEllipse.prototype.draw=function(ar, br){
+			var step = (ar > br) ? 1 / ar : 1 / br;
+			this.ctx.beginPath();
+			this.ctx.strokeStyle=this.color;
+			this.ctx.moveTo(this.x + ar, this.y); //从椭圆的右端点开始绘制
+			for (var i = 0; i < Math.PI*2; i += step)
+			{
+			    //参数方程为x = a * cos(i), y = b * sin(i)，
+			    //参数为i，表示度数（弧度）
+			    this.ctx.lineTo(this.x + ar * Math.cos(i), this.y + br * Math.sin(i));
+			}
+			this.ctx.closePath();
+			this.ctx.lineWidth = 2;
+			this.ctx.strokeStyle=this.color;
+			this.ctx.stroke();
+		};
+		function ParaCurve(ctx, color, start,target,a){
+			this.start = start;
+			this.target = target;
+			this.color = color;
+			this.dx = target.x - start.x;
+			this.dy = target.y - start.y;
+			this.a = a || 0.002;//a>0抛物线开口向上，a<0抛物线开口向下
+			this.b = (this.dy-this.a*this.dx*this.dx)/this.dx;
+			this.rate = this.dx>0?1:-1;
+
+			this.draw(ctx);
+		}
+		ParaCurve.prototype.draw = function (ctx){
+			var b = this.b;
+			var a = this.a;
+			var start = this.start;
+			var ox = start.x;
+			var oy = start.y;
+			var dx = this.dx;
+			var rate = this.rate;
+			var startx = 0;
+			var starty = 0;
+			var incr = 0;
+
+
+			ctx.beginPath();
+			ctx.strokeStyle=this.color;
+			ctx.moveTo(ox, oy);
+			while(startx < Math.abs(dx)){
+				incr = 2*a*startx + b;
+				startx = startx + Math.sqrt(10/(incr*incr + 1));
+				starty = a*startx*startx + b*startx;
+				ctx.lineTo(ox+startx*rate, oy+starty);
+			}
+			ctx.lineWidth=2;
+			ctx.stroke();
+		}
+		var ball1 = new TargetBall({
+			x: 400,
+			y: 140,
+			modify: 25,
+			color: '#0ff'
+		}, mctx);
+		var ball2 = new TargetBall({
+			x: 300,
+			y: 200,
+			modify: 20,
+			color: '#f0f'
+		}, mctx);
+
+		var ball3 = new TargetBall({
+			x: 200,
+			y: 200,
+			modify: 20,
+			color: '#00f'
+		}, mctx);
+
+		var ell1 = new TargetEllipse({
+			x: 360,
+			y: 290,
+			modify_a: 25,
+			modify_b: 15,
+			color: '#f00'
+		}, mctx);
+		var ell2 = new TargetEllipse({
+			x: 405,
+			y: 245,
+			modify_a: 15,
+			modify_b: 8,
+			color: '#0f0'
+		}, mctx);
+		var ell3 = new TargetEllipse({
+			x: 240,
+			y: 260,
+			modify_a: 20,
+			modify_b: 15,
+			color: '#eee'
+		}, mctx);
+		var be1 = new ParaCurve(lctx, '#0ff',{x:400, y:140}, {x:360,y:290}, Math.PI/34);
+		var be2 = new ParaCurve(lctx, '#f0f', {x:300, y:200},{x:360,y:290}, Math.PI/300);
+		var be3 = new ParaCurve(lctx, '#0f0',{x:405, y:245}, {x:360,y:290},  Math.PI/142);
+		var be4 = new ParaCurve(lctx, '#00f',{x:200, y:200}, {x:360,y:290},  Math.PI/700);
+		var be5 = new ParaCurve(lctx, '#eee',{x:240, y:260}, {x:360,y:290},  Math.PI/700);
+
+		function MoveLine(start, target, b, a, ctx){
+			this.x = start.x;
+			this.y = start.y;
+			this.tx = target.x;
+			this.ty = target.y;
+			this.r = 1;
+			this.ctx = ctx;
+			this.b = b;
+			this.a = a;
+
+			this.dx = this.tx - this.x;
+			this.rate = this.dx>0?1:-1;
+			this.startX = 0;
+			this.tangent = 0
+		}
+		MoveLine.prototype.loop = function(){
+			var b = this.b;
+			var tangent = this.tangent;
+			var startX = this.startX;
+			var a = this.a;
+			var dx = this.dx;
+			var rate = this.rate;
+			var _this = this;
+			if(startX > Math.abs(dx)){
+				startX = 0;
+			}
+			tangent = 2*a*startX + b;
+			startX = startX + Math.sqrt(10/(tangent*tangent + 1));
+			var x = (startX+1)*rate;
+			var y = a*startX*startX+b*startX;
+			this.update(x, y);
+			this.startX = startX;
+		};
+		MoveLine.prototype.update = function(x, y){
+			this.vx = x;
+			this.vy = y;
+			this.draw();
+		};
+		MoveLine.prototype.draw=function(){
+			this.ctx.beginPath()
+			// this.ctx.arc(this.x+this.vx, this.y+this.vy, this.r, 0, 2*Math.PI);
+			this.ctx.rect(this.x+this.vx, this.y+this.vy, 2, 2);
+			this.ctx.closePath();
+			this.ctx.fillStyle = 'rgba(255, 255, 1, 1)';
+			this.ctx.strokeStyle ="rgba(255, 255, 1, 1)";
+			this.ctx.shadowColor = 'rgba(255, 255, 255, 1)';
+			this.ctx.shadowBlur = 10;
+			this.ctx.shadowOffsetX = 0;
+			this.ctx.shadowOffsetY = -1;
+			this.ctx.fill();
+			this.ctx.stroke();
+		}
+		var ml = new MoveLine({x:400, y:140},{x:360,y:290}, be1.b, be1.a, lctx);
+		var ml1 = new MoveLine({x:300, y:200},{x:360,y:290}, be2.b, be2.a, lctx);
+		var ml2 = new MoveLine({x:405, y:245}, {x:360,y:290}, be3.b, be3.a, lctx);
+		var ml3 = new MoveLine({x:200, y:200}, {x:360,y:290}, be4.b, be4.a, lctx);
+		var ml4 = new MoveLine({x:240, y:260}, {x:360,y:290}, be5.b, be5.a, lctx);
+		function ani(){
+				cctx.drawImage(main, 0, 0);
+
+				mctx.clearRect(0, 0, 524, 394);
+				ball1.update();
+				ball2.update();
+				ball3.update();
+				ell1.update();
+				ell2.update();
+				ell3.update();
+				mctx.drawImage(cacheCanvas, 0, 0);
+
+				lctx.clearRect(0, 0, 524, 394);
+				be1.draw(lctx);
+				be2.draw(lctx);
+				be3.draw(lctx);
+				be4.draw(lctx);
+				be5.draw(lctx);
+				ml.loop();
+				ml1.loop();
+				ml2.loop();
+				ml3.loop();
+				ml4.loop();
+
+				requestAnimationFrame(ani);
+		}
+		var img = new Image();
+		img.src="map.jpg"
+		img.onload=function(){
+			ctx.drawImage(img, 0, 0);
+			ani();
+		};
+
+	</script>
+</body>
+</html>
