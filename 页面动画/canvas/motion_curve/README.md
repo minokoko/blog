@@ -211,9 +211,11 @@ A称之为波幅(纵轴偏移量)，k为可控制周期数(波数)，wt为改变
 
 **同样的，我们都可以扩展这些函数表达式，以它们为变化因子，应用到不同的动画中。**
 
-最后，附上一个关于运动轨迹的综合例子
-![地图转移](http://ozp3e2myx.bkt.clouddn.com/map.gif)
-代码:[]()
+最后，附上一个关于运动轨迹的综合例子  
+
+![地图转移](http://ozp3e2myx.bkt.clouddn.com/map.gif)  
+
+代码:[源码](https://github.com/careycui/blog/blob/master/%E9%A1%B5%E9%9D%A2%E5%8A%A8%E7%94%BB/canvas/map/map.html)
 
 ### 运动曲线与缓动函数
 运动曲线是关于位移和时间的关系。
