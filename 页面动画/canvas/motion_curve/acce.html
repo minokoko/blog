@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>匀速直线运动-运动曲线</title>
+	<style>
+		#canvas1, #canvas2{
+			position: absolute;
+			left: 50%;
+			margin-left: -510px;
+			border: 1px solid #0ff;
+		}
+		#canvas2{
+			top: 300px;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas1" width="1020px" height="300"></canvas>
+	<canvas id="canvas2" width="1020px" height="300"></canvas>
+	<script>
+		var $canvas1 = document.getElementById('canvas1');
+		var ctx1 = $canvas1.getContext('2d');
+		var $canvas2 = document.getElementById('canvas2');
+		var ctx2 = $canvas2.getContext('2d');
+
+		var $cacheCanvas = document.createElement('canvas');
+		$cacheCanvas.width = 40;
+		$cacheCanvas.height = 40;
+		var cacheCtx = $cacheCanvas.getContext('2d');
+
+		var $cacheCanvas2 = document.createElement('canvas');
+		$cacheCanvas2.width = 40;
+		$cacheCanvas2.height = 40;
+		var cacheCtx2 = $cacheCanvas2.getContext('2d');
+
+		function drawMoveArc(cacheCtx){
+			cacheCtx.beginPath();
+			cacheCtx.fillStyle="#f0f";
+			cacheCtx.arc(20, 20, 20, 0, 2*Math.PI, true);
+			cacheCtx.closePath();
+			cacheCtx.fill();
+		}
+		drawMoveArc(cacheCtx);
+		drawMoveArc(cacheCtx2);
+
+
+		var distance = 980;
+		var startX = 0;
+		var v = 5;
+
+		function move(){
+			if(startX > 980){
+				return;
+			}
+			startX += v;
+			ctx1.clearRect(0, 0, 1020, 600);
+			ctx1.drawImage($cacheCanvas, startX, 200);
+			requestAnimationFrame(move);
+		}
+		requestAnimationFrame(move);
+
+		var av = 0.1;
+		var v2 = 0;
+		var startX2 = 0;
+
+		function move2(){
+			if(startX2 > 980){
+				return;
+			}
+			v2 += av;
+			startX2 += v2;
+			ctx2.clearRect(0, 0, 1020, 600);
+			ctx2.drawImage($cacheCanvas2, startX2,100);
+			requestAnimationFrame(move2);
+		}
+		requestAnimationFrame(move2);
+	</script>
+</body>
+</html>

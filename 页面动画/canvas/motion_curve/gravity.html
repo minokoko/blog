@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>匀速直线运动-运动曲线</title>
+	<style>
+		#canvas{
+			position: absolute;
+			left: 50%;
+			margin-left: -300px;
+			border: 1px solid #0ff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="600" height="600"></canvas>
+	<script>
+		var $canvas = document.getElementById('canvas');
+		var ctx = $canvas.getContext('2d');
+
+		var $cacheCanvas = document.createElement('canvas');
+		$cacheCanvas.width = 40;
+		$cacheCanvas.height = 40;
+		var cacheCtx = $cacheCanvas.getContext('2d');
+
+		function drawMoveArc(){
+			cacheCtx.beginPath();
+			cacheCtx.fillStyle="#f0f";
+			cacheCtx.arc(20, 20,20, 0, 2*Math.PI, true);
+			cacheCtx.closePath();
+			cacheCtx.fill();
+		}
+		drawMoveArc();
+
+		
+
+		var vy = 0;
+		var gravity = 0.3;//定义的重力加速度
+		var bounce = -0.8;//定义的衰减系数
+		startY = 0;
+		function move(){
+			vy += gravity;
+			startY += vy;
+
+			//检测是否触界
+			if(startY + 40 > 600){
+				startY = 600 - 40;
+				vy *= bounce;
+			}
+			ctx.clearRect(0, 0, 600, 600);
+			ctx.drawImage($cacheCanvas, 280, startY);
+			requestAnimationFrame(move);
+		}
+		requestAnimationFrame(move);
+	</script>
+</body>
+</html>

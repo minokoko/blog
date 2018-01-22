@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>匀速直线运动-运动曲线</title>
+	<style>
+		#canvas{
+			position: absolute;
+			left: 50%;
+			margin-left: -510px;
+			border: 1px solid #0ff;
+			background-color: #eee;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="1020px" height="600"></canvas>
+	<script>
+		var $canvas = document.getElementById('canvas');
+		var ctx = $canvas.getContext('2d');
+
+		var $cacheCanvas1 = document.createElement('canvas');
+		$cacheCanvas1.width = 20;
+		$cacheCanvas1.height = 20;
+		var cacheCtx1 = $cacheCanvas1.getContext('2d');
+
+		var $cacheCanvas2 = document.createElement('canvas');
+		$cacheCanvas2.width = 20;
+		$cacheCanvas2.height = 20;
+		var cacheCtx2 = $cacheCanvas2.getContext('2d');
+
+		var $cacheCanvas3 = document.createElement('canvas');
+		$cacheCanvas3.width = 20;
+		$cacheCanvas3.height = 20;
+		var cacheCtx3 = $cacheCanvas3.getContext('2d');
+
+		function drawMoveArc(cc, c){
+			cc.beginPath();
+			cc.fillStyle = c;
+			cc.arc(10, 10, 10, 0, 2*Math.PI, true);
+			cc.closePath();
+			cc.fill();
+		}
+		drawMoveArc(cacheCtx1, '#f0f');
+		drawMoveArc(cacheCtx2, '#ff0');
+		drawMoveArc(cacheCtx3, '#0ff');
+
+		function drawAxis(){
+			ctx.beginPath();
+			ctx.moveTo(50, 50);
+			ctx.lineTo(50, 370);
+			ctx.moveTo(30, 350);
+			ctx.lineTo(500, 350);
+			ctx.closePath();
+			ctx.lineWidth = 2;
+			ctx.strokeStyle="#000";
+			ctx.stroke();
+
+			ctx.font = "24px serif";
+			ctx.fillText('t', 490, 370);
+
+			ctx.font = '24px serif';
+			ctx.fillText('d', 30, 60);
+		}
+		function drawVline(target){
+			ctx.beginPath();
+			ctx.moveTo(50, 350);
+			ctx.lineTo(target.x, target.y);
+			ctx.closePath();
+			ctx.lineWidth = 1;
+			ctx.strokeStyle=target.c;
+			ctx.stroke();
+		}
+		drawAxis();
+
+		var totalTime = 4000;
+		var startTime;
+		var offsetTime;
+		var distance1 = 800;
+		var startX1 = 0;
+
+		var distance2 = 600;
+		var startX2 = 0;
+
+		var distance3 = 1000;
+		var startX3 = 0;
+
+		function move(){
+			if(!startTime){
+				startTime = Date.now();
+			}
+			offsetTime = Date.now() - startTime;
+			var per = offsetTime/totalTime;
+			if(offsetTime > totalTime){
+				per = 1;
+			}
+			startX1 = distance1*per;
+			startX2 = distance2*per;
+			startX3 = distance3*per;
+
+			ctx.clearRect(0, 0, 1020, 600);
+			ctx.drawImage($cacheCanvas1, startX1, 400);
+			ctx.drawImage($cacheCanvas2, startX2, 450);
+			ctx.drawImage($cacheCanvas3, startX3, 500);
+			drawAxis();
+			drawVline({
+				x: 50 + 450 * per,
+				y: 350 - 300 * per,
+				c: '#0ff'
+			});
+			drawVline({
+				x: 50 + 450 * per,
+				y: 350 - 180 * per,
+				c: '#ff0'
+			});
+			drawVline({
+				x: 50 + 450 * per,
+				y: 350 - 240 * per,
+				c: '#f0f'
+			});
+			if(per < 1){
+				requestAnimationFrame(move);
+			}
+		}
+		requestAnimationFrame(move);
+	</script>
+</body>
+</html>
