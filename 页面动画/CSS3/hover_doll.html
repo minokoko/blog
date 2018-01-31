@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Hover Doll</title>
+	<style>
+		.area-box{
+			width: 600px;
+			height: 400px;
+			position: absolute;
+			left: 50%;
+			margin-left: -300px;
+			border: 1px solid #000;
+
+			overflow: hidden;
+		}
+		.boys{
+			width: 140px;
+			height: 100px;
+			position: absolute;
+			left: 50px;
+			bottom: -100px;
+			overflow: hidden;
+
+			-webkit-transition: all .5s cubic-bezier(0, 0, 0.16, 1.07);
+			-moz-transition: all .5s cubic-bezier(0, 0, 0.16, 1.07);
+			transition: all .5s cubic-bezier(0, 0, 0.16, 1.07);
+		}
+			.boys .header{
+				width: 60px;
+				height: 60px;
+				position: absolute;
+				left: 50%;
+				margin-left: -30px;
+				border-radius: 50%;
+				background-color: #2196f3;
+				box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+				z-index: 1;
+			}
+				.header .header-eyes{
+					height: 15px;
+					width: 100%;
+					position: absolute;
+					top: 15px;
+				}
+					.header-eyes .header-eyes__left{
+						width: 20px;
+						height: 20px;
+						position: absolute;
+						left: 7px;
+						border-radius: 50%;
+						background-color: #fff;
+					}
+						.header-eyes .header-eyes__left .header-eyes__left-inner{
+							position: absolute;
+							left: 4px;
+							top: 4px;
+							width: 12px;
+							height: 12px;
+							border-radius: 50%;
+							background-color: #525252;
+
+							-webkit-transition: all .25s ease-in-out;
+							-moz-transition: all .25s ease-in-out;
+							transition: all .25s ease-in-out;
+						}
+							.header-eyes .header-eyes__left .header-eyes__left-inner:after{
+								content: ' ';
+								position: absolute;
+								top: 4px;
+								right: 4px;
+								width: 2px;
+								height: 2px;
+								border-radius: 50%;
+								background-color: #d3d3d3;
+							}
+					.header-eyes .header-eyes__right{
+						width: 20px;
+						height: 20px;
+						position: absolute;
+						right: 7px;
+						border-radius: 50%;
+						background-color: #fff;
+					}
+						.header-eyes .header-eyes__right .header-eyes__right-inner{
+							position: absolute;
+							left: 4px;
+							top: 4px;
+							width: 12px;
+							height: 12px;
+							border-radius: 50%;
+							background-color: #525252;
+
+							-webkit-transition: all .25s ease-in-out;
+							-moz-transition: all .25s ease-in-out;
+							transition: all .25s ease-in-out;
+						}
+							.header-eyes .header-eyes__right .header-eyes__right-inner:after{
+								content: ' ';
+								position: absolute;
+								top: 4px;
+								right: 4px;
+								width: 2px;
+								height: 2px;
+								border-radius: 50%;
+								background-color: #d3d3d3;
+							}
+				.header-mouse{
+					position: absolute;
+					bottom: 9px;
+					left: 50%;
+					margin-left: -11px;
+					width: 22px;
+					height: 10px;
+				}
+					.header-mouse .header-mouse__inner{
+						position: absolute;
+						bottom: 3px;
+						width:100%;
+						height: 4px;
+						background-color: #fff;
+						border-bottom-left-radius:50px 40px;
+						border-bottom-right-radius:50px 40px;
+
+						-webkit-transition: all .1s ease-in-out;
+						-moz-transition: all .1s ease-in-out;
+						transition: all .1s ease-in-out;
+					}
+					.header-mouse .header-mouse__inner.smile1{
+						height: 7px;
+						bottom: 1px;
+
+					}
+					.header-mouse .header-mouse__inner.smile2{
+						height: 10px;
+						bottom: 0;
+					}
+			.boys .body{
+				width: 140px;
+				height: 140px;
+				position: absolute;
+				left: 50%;
+				margin-left: -70px;
+				border-radius: 50%;
+				top: 55px;
+				background-color: #3F51B5;
+				box-shadow: 0 0 5px 0 rgba(0,0, 0,.2);
+			}
+
+			.boys2{
+				left: 160px;
+				bottom: -110px;
+				height: 110px;
+				z-index: 1;
+				transition-delay: 0.1s;
+			}
+			.boys3{
+				left: 300px;
+			}
+			.boys4{
+				left: 430px;
+				bottom: -120px;
+				height: 120px;
+				transition-delay: 0.2s;
+			}
+
+			.area-box:hover .boys,.area-box.focus .boys{
+				bottom: 0;
+			}
+			.input-area{
+				padding: 10px;
+				text-align: center;
+				font-size: 16px;
+			}
+				.input-area input{
+					padding: 0 5px;
+					line-height: 24px;
+					vertical-align: middle;
+					border: 1px solid #e4e4e4;
+					background-image: none;
+				}
+	</style>
+</head>
+<body>
+	<div class="area-box" id="area-box">
+		<div class="input-area">
+			<label>名称</label>
+			<input type="text" name="test" id="test">
+			<button>提交</button>
+		</div>
+		<div class="boys boys1" id="boys1">
+			<div class="header">
+				<div class="header-eyes">
+					<div class="header-eyes__left">
+						<div class="header-eyes__left-inner"></div>
+					</div>
+					<div class="header-eyes__right">
+						<div class="header-eyes__right-inner"></div>
+					</div>
+				</div>
+				<div class="header-mouse">
+					<div class="header-mouse__inner"></div>
+				</div>
+			</div>
+			<div class="body"></div>
+		</div>
+		<div class="boys boys2" id="boys2">
+			<div class="header">
+				<div class="header-eyes">
+					<div class="header-eyes__left">
+						<div class="header-eyes__left-inner"></div>
+					</div>
+					<div class="header-eyes__right">
+						<div class="header-eyes__right-inner"></div>
+					</div>
+				</div>
+				<div class="header-mouse">
+					<div class="header-mouse__inner"></div>
+				</div>
+			</div>
+			<div class="body"></div>
+		</div>
+		<div class="boys boys3" id="boys3">
+			<div class="header">
+				<div class="header-eyes">
+					<div class="header-eyes__left">
+						<div class="header-eyes__left-inner"></div>
+					</div>
+					<div class="header-eyes__right">
+						<div class="header-eyes__right-inner"></div>
+					</div>
+				</div>
+				<div class="header-mouse">
+					<div class="header-mouse__inner"></div>
+				</div>
+			</div>
+			<div class="body"></div>
+		</div>
+		<div class="boys boys4" id="boys4">
+			<div class="header">
+				<div class="header-eyes">
+					<div class="header-eyes__left">
+						<div class="header-eyes__left-inner"></div>
+					</div>
+					<div class="header-eyes__right">
+						<div class="header-eyes__right-inner"></div>
+					</div>
+				</div>
+				<div class="header-mouse">
+					<div class="header-mouse__inner"></div>
+				</div>
+			</div>
+			<div class="body"></div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		function Boy($boy){
+			this.$boy = $boy;
+			var h = $boy.clientHeight;
+			this.max_w = 6;
+			this.max_h = 6;
+			this.min_w = 1;
+			this.min_h = 1;
+			var $header = this.$header = $boy.querySelector('.header');
+			this.mouse = $header.querySelector('.header-mouse__inner');
+			this.left_eye = $header.querySelector('.header-eyes__left-inner');
+			this.right_eye = $header.querySelector('.header-eyes__right-inner');
+			this.rect = $boy.getBoundingClientRect();
+			var tmp = this.$header.getBoundingClientRect();
+			this.rect_header = {
+				left: tmp.left,
+				right: tmp.right,
+				top: tmp.top - h,
+				bottom: tmp.bottom - h 
+			};
+		}
+		Boy.prototype.smile = function(level){
+			var $mouse = this.mouse;
+			$mouse.classList.remove('smile1', 'smile2');
+			if(level!==0){
+				$mouse.classList.add('smile'+level);
+			}
+		}
+		Boy.prototype.update = function(mouse){
+			var rect_header = this.rect_header;
+			var pos = '';
+			if(mouse.x < rect_header.left){
+				pos = 'l';
+			}else if(mouse.x >= rect_header.left && mouse.x <= rect_header.right){
+				pos = 'c';
+			}else{
+				pos = 'r';
+			}
+
+			if(mouse.y < rect_header.top){
+				pos = pos + 't';
+			}else if(mouse.y >= rect_header.top && mouse.y <= rect_header.bottom){
+				pos = pos + 'c';
+			}else{
+				pos = pos + 'b'
+			}
+			this.follow(pos);
+		}
+		//pos: lt:left top, lb:left bottom, rt: right top, rb: right bottom, ct: center top, cb: center bottom
+		Boy.prototype.follow = function(pos){
+			var ley = this.left_eye;
+			var rey = this.right_eye;
+			var mw = this.max_w;
+			var mh = this.max_h;
+			var miw = this.min_w;
+			var mih = this.min_h;
+			var cw = (mw+miw)/2;
+			var ch = (mh+mih)/2;
+
+			if(pos === 'lt'){
+				ley.style.left = miw + 'px';
+				ley.style.top = mih + 'px';
+				rey.style.left = miw + 'px';
+				rey.style.top = mih + 'px';
+			}
+			if(pos === 'lb'){
+				ley.style.left = miw + 'px';
+				ley.style.top = mh + 'px';
+				rey.style.left = miw + 'px';
+				rey.style.top = mh + 'px';
+			}
+			if(pos === 'rt'){
+				ley.style.left = mw + 'px';
+				ley.style.top = mih + 'px';
+				rey.style.left = mw + 'px';
+				rey.style.top = mih + 'px';
+			}
+			if(pos === 'rb'){
+				ley.style.left = mw + 'px';
+				ley.style.top = mh + 'px';
+				rey.style.left = mw + 'px';
+				rey.style.top = mh + 'px';
+			}
+			if(pos === 'ct'){
+				ley.style.left = cw+ 'px';
+				ley.style.top = mih + 'px';
+				rey.style.left = cw + 'px';
+				rey.style.top = mih + 'px';
+			}
+			if(pos === 'cb'){
+				ley.style.left = cw + 'px';
+				ley.style.top = mh + 'px';
+				rey.style.left = cw + 'px';
+				rey.style.top = mh + 'px';
+			}
+			if(pos === 'cc'){
+				ley.style.left = cw + 'px';
+				ley.style.top = ch + 'px';
+				rey.style.left = cw + 'px';
+				rey.style.top = ch + 'px';
+			}
+		}
+		var boy1 = new Boy(document.getElementById('boys1'));
+		var boy2 = new Boy(document.getElementById('boys2'));
+		var boy3 = new Boy(document.getElementById('boys3'));
+		var boy4 = new Boy(document.getElementById('boys4'));
+		var $area = document.getElementById('area-box');
+		var rect = $area.getBoundingClientRect();
+		var start = false;
+		$area.addEventListener('mouseenter', function(event){
+			console.log('enter');
+			start = true;
+		}, false);
+		document.addEventListener('mousemove', function(event){
+			if(start){
+				var x = event.pageX;
+				var y = event.pageY;
+
+				boy1.update({x: x, y: y});
+				boy2.update({x: x, y: y});
+				boy3.update({x: x, y: y});
+				boy4.update({x: x, y: y});
+			}
+		});
+		$area.addEventListener('mouseleave', function(event){
+			if(isFocus){
+				return;
+			}
+			console.log('leave');
+			start = false;
+		}, false);
+
+		var $input = document.getElementById('test');
+		var isFocus = false;
+		$input.addEventListener('mouseenter', function(){
+			if(isFocus){
+				return;
+			}
+			var level = 1;
+			boy1.smile(level);
+			boy2.smile(level);
+			boy3.smile(level);
+			boy4.smile(level);
+		}, false);
+		$input.addEventListener('mouseleave', function(){
+			if(isFocus){
+				return;
+			}
+			var level = 0;
+			boy1.smile(level);
+			boy2.smile(level);
+			boy3.smile(level);
+			boy4.smile(level);
+		}, false);
+		$input.addEventListener('focus', function(){
+			var level = 2;
+			isFocus = true;
+			boy1.smile(level);
+			boy2.smile(level);
+			boy3.smile(level);
+			boy4.smile(level);
+
+			$area.classList.add('focus');
+		}, false);
+		$input.addEventListener('blur', function(){
+			var level = 0;
+			isFocus = false;
+			boy1.smile(level);
+			boy2.smile(level);
+			boy3.smile(level);
+			boy4.smile(level);
+
+			$area.classList.remove('focus');
+		}, false);
+	</script>
+</body>
+</html>
