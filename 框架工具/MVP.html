@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>MXX Demo</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		.content{
+			width: 960px;
+			padding: 100px 0;
+			margin: 0 auto;
+			background-color: #fafafa;
+		}
+		.input-box{
+			width: 300px;
+			margin: 0 auto;
+		}
+		input{
+			display: block;
+			padding: 10px 15px;
+			width: 100%;
+			outline: none;
+			border: 1px solid #dddee1;
+			border-radius: 10px;
+
+			-webkit-transition: all .3s ease-out;
+			transition: all .3s ease-out;
+		}
+		input:focus{
+			border-color: #57a3f3;
+			box-shadow: 0 0 5px #57a3f3;
+		}
+		.card{
+			width: 300px;
+			height: 190px;
+			margin: 50px auto;
+			padding: 10px 15px;
+			border: 1px solid #a5d1ff;
+			border-radius: 20px;
+			box-shadow: 0 0 5px #57a3f3;
+			background-color: #fff;
+		}
+		.item:after{
+			content:' ';
+			display: block;
+			visibility: hidden;
+			clear: both;
+		}
+		.item .item-title{
+			float: left;
+			width: 80px;
+			padding: 10px 0;
+			text-align: right;
+			color: #333;
+			font-weight: 600;
+		}
+		.item .item-desc{
+			color: #6b6b6b;
+			padding: 10px 0 10px 90px;
+		}
+	</style>
+</head>
+<body>
+	<div class="content">
+		<div class="input-box">
+			<input type="text" name="user_name" id="user_name" placeholder="姓名" />
+		</div>
+		<div class="card">
+			<div class="item">
+				<div class="item-title">姓名：</div>
+				<div class="item-desc" id="name">
+					
+				</div>
+			</div>
+			<div class="item">
+				<div class="item-title">性别：</div>
+				<div class="item-desc" id="sex">
+					
+				</div>
+			</div>
+			<div class="item">
+				<div class="item-title">会员等级：</div>
+				<div class="item-desc" id="vip">
+					
+				</div>
+			</div>
+			<div class="item">
+				<div class="item-title">余额：</div>
+				<div class="item-desc" id="reset">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		var demoApp = {};
+
+		function Model(){
+			this.user_name = '';
+			this.objs = [{
+				userName: 'carey',
+				userSex: '男',
+				userVip: 'vip1',
+				userReset: '111'
+			},{
+				userName: 'lili',
+				userSex: '女',
+				userVip: 'vip2',
+				userReset: '222'
+			},{
+				userName: 'momo',
+				userSex: '男',
+				userVip: 'vip3',
+				userReset: '11'
+			},{
+				userName: 'caicai',
+				userSex: '男',
+				userVip: 'vip4',
+				userReset: '32'
+			}];
+
+		}
+		Model.prototype.setUserNameInput = function(val){
+			this.user_name = val;
+		}
+		Model.prototype.getObj = function(){
+			var inputName = this.user_name;
+			var i = 0;
+			var l = this.objs.length;
+			var tmp;
+
+			for(;i<l;i++){
+				tmp = this.objs[i];
+				if(tmp.userName == inputName){
+					break;
+				}else{
+					tmp = null;
+				}
+			}
+			return tmp;
+		}
+
+		//设定Model
+		demoApp.Model = Model;
+
+		function View(){
+			this.presenter = null;
+			//视图元素
+			this.$input = document.getElementById('user_name');
+
+			this.$card = {};
+			this.$card.$userName = document.getElementById('name');
+			this.$card.$userSex = document.getElementById('sex');
+			this.$card.$userVip = document.getElementById('vip');
+			this.$card.$userReset = document.getElementById('reset');
+
+		}
+		View.prototype.init = function(){
+			this.presenter = new demoApp.Presenter(this);
+			this.bind();
+		}
+		View.prototype.bind = function(){
+			var presenter = this.presenter;
+			var _this = this;
+			document.addEventListener('keydown', function(e){
+				if(e.keyCode == 13){
+					presenter.update();
+				}
+			}, false);
+
+			_this.$input.addEventListener('input', function(e){
+				var val = this.value;
+				presenter.updateInput(val);
+			}, false)
+		}
+		View.prototype.render = function(data){
+			var $card = this.$card;
+			for(var key in $card){
+				if($card.hasOwnProperty(key)){
+					$card[key].innerHTML = data[key.replace(/\$/g, '')];
+				}
+			} 
+		}
+		//设定view
+		demoApp.View = View;
+
+		function Presenter(view){
+			this.model = null;
+			this.view = view;
+
+			this.init();
+		}
+		Presenter.prototype.init = function(){
+			var model = this.model = new demoApp.Model();
+			var view = this.view;
+			if(model.getObj()){
+				view.render(model.getObj());
+			}
+		}
+		Presenter.prototype.updateInput = function(val){
+			this.model.setUserNameInput(val);
+		}
+		Presenter.prototype.update = function(){
+			var data = this.model.getObj();
+			this.view.render(data);
+		}
+
+		demoApp.Presenter = Presenter;
+
+		var view = new demoApp.View();
+		view.init();
+	</script>
+</body>
+</html>
